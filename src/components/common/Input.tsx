@@ -1,22 +1,26 @@
-import React from 'react';
-import { Button as MUIButton } from '@mui/material';
+// import React from 'react';
+import { TextField } from '@mui/material';
 
-type ButtonProps = {
+type InputProps = {
   label: string;
-  onClick: () => void;
-  variant?: 'text' | 'outlined' | 'contained';
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'contained' }) => {
+const Input: React.FC<InputProps> = ({ label, type = 'text', value, onChange }) => {
   return (
-    <MUIButton
-      onClick={onClick}
-      variant={variant}
-      className="text-white bg-primary dark:bg-secondary font-bold py-2 px-4 rounded"
-    >
-      {label}
-    </MUIButton>
+    <TextField
+      label={label}
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full bg-white dark:bg-gray-800 text-primary dark:text-white"
+      InputLabelProps={{
+        className: 'text-gray-700 dark:text-gray-300',
+      }}
+    />
   );
 };
 
-export default Button;
+export default Input;
