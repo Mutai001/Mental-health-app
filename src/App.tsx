@@ -1,5 +1,5 @@
-// App.tsx
-import React from 'react';
+// import React from 'react';
+import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import AreaOfExpertise from './components/AreaOfExpertise';
@@ -10,15 +10,17 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <Header />
-      <HeroSection />
-      <AreaOfExpertise />
-      <CaseStudies />
-      <Testimonials />
-      <Specialists />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div>
+        <Header />
+        <HeroSection />
+        <AreaOfExpertise />
+        <CaseStudies />
+        <Testimonials />
+        <Specialists />
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 };
 
