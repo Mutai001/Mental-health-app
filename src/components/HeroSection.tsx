@@ -1,26 +1,26 @@
-// src/components/HeroSection.tsx
+// HeroSection.tsx
 import React from 'react';
-import { Button, Typography, Container } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 const HeroSection: React.FC = () => {
   return (
-    <section
-      className="bg-cover h-screen flex items-center"
-      style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b')",
-      }}
-    >
-      <Container className="text-white max-w-lg">
-        <Typography variant="h3" className="font-bold">
-          Mental Health & Counseling Services
-        </Typography>
-        <Typography variant="body1" className="my-4">
-          We provide compassionate and professional mental health services tailored to your needs.
-        </Typography>
-        <Button variant="contained" className="bg-green-600 hover:bg-green-700">
-          Get Started
-        </Button>
-      </Container>
+    <section className="bg-green-100 py-12">
+      <div className="container mx-auto flex flex-col md:flex-row items-center">
+        <div className="md:w-1/2">
+          <Typography variant="h3" className="text-green-800 font-bold mb-4">
+            Embrace Your Mental Health
+          </Typography>
+          <Typography variant="body1" className="mb-8">
+            We Understand the Challenges You Face. That's Why We Put People First in Everything.
+          </Typography>
+          <Button variant="contained" color="success" size="large">
+            Book an Appointment
+          </Button>
+        </div>
+        <div className="md:w-1/2">
+          <img src="path-to-image" alt="Mental Health" className="rounded-full" />
+        </div>
+      </div>
     </section>
   );
 };

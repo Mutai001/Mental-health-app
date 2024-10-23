@@ -1,25 +1,26 @@
-// src/components/Footer.tsx
+// Footer.tsx
 import React from 'react';
-import { Typography, Container, IconButton } from '@mui/material';
-import { Facebook, Twitter, Instagram } from '@mui/icons-material';
+import { Typography, TextField, Button } from '@mui/material';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-green-600 text-white py-4">
-      <Container className="flex justify-between items-center">
-        <Typography variant="body1">© 2024 MindThera</Typography>
-        <div className="flex space-x-2">
-          <IconButton href="https://facebook.com" target="_blank" className="text-white">
-            <Facebook />
-          </IconButton>
-          <IconButton href="https://twitter.com" target="_blank" className="text-white">
-            <Twitter />
-          </IconButton>
-          <IconButton href="https://instagram.com" target="_blank" className="text-white">
-            <Instagram />
-          </IconButton>
+    <footer className="bg-green-800 text-white py-8">
+      <div className="container mx-auto text-center">
+        <Typography variant="h6" className="mb-4">
+          Get our latest resources and event invites right in your inbox!
+        </Typography>
+        <div className="flex justify-center items-center mb-4">
+          <TextField
+            label="Your Email Here"
+            variant="outlined"
+            className="bg-white rounded"
+          />
+          <Button variant="contained" color="primary" className="ml-4">
+            Subscribe Now
+          </Button>
         </div>
-      </Container>
+        <Typography variant="body2">© 2024. All Rights Reserved. Privacy Policy | Terms & Conditions</Typography>
+      </div>
     </footer>
   );
 };
