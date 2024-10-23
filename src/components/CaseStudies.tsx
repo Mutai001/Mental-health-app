@@ -1,4 +1,3 @@
-// CaseStudies.tsx
 import React from 'react';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
 
@@ -17,6 +16,10 @@ const caseStudies = [
   },
 ];
 
+const handleButtonClick = (title: string) => {
+  alert(`You clicked on: ${title}`);
+};
+
 const CaseStudies: React.FC = () => {
   return (
     <section className="py-12 bg-gray-50">
@@ -29,9 +32,16 @@ const CaseStudies: React.FC = () => {
             <Card>
               <CardContent>
                 <img src={study.img} alt={study.title} className="mb-4 rounded" />
-                <Typography variant="h6">
+                <Typography variant="h6" className="mb-4">
                   {study.title}
                 </Typography>
+                <Button 
+                  variant="contained" 
+                  color="success" 
+                  onClick={() => handleButtonClick(study.title)}
+                >
+                  Learn More
+                </Button>
               </CardContent>
             </Card>
           </Grid>
