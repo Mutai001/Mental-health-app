@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import logo from '../assets/images/mindful logo.png';
+import logo from '../assets/images/mindful logo.png'; // Ensure the logo filename has no spaces
 
 const Header: React.FC = () => {
   return (
     <header className="bg-[#2A5B4D] py-4 px-8 flex justify-between items-center shadow-lg">
       {/* Logo */}
       <div className="flex items-center">
-        <img src={logo} alt="Mindful Logo" className="h-8 w-8 mr-3" />
+        <img src={logo} alt="Mindful Logo" className="h-8 w-auto mr-3" /> {/* Adjusted the width to auto and reduced height */}
         <span className="text-white font-bold text-xl tracking-wide">Mindful</span>
       </div>
 
