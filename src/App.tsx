@@ -1,6 +1,7 @@
 // import React from 'react';
 import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter
-import Header from './components/Header';
+// import Header from './components/Header';
+import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import AreaOfExpertise from './components/AreaOfExpertise';
 import CaseStudies from './components/CaseStudies';
@@ -12,7 +13,8 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <div>
-        <Header />
+        {/* <Header /> */}
+        <Navbar />
         <HeroSection />
         <AreaOfExpertise />
         <CaseStudies />
