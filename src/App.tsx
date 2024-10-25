@@ -21,7 +21,7 @@ const App: React.FC = () => {
         <CaseStudies />
         <Testimonials />
         <Specialists />
-        <Mindtraining />  // Added new component for mindtraining section
+        <Mindtraining />
         <Footer />
       </div>
     </BrowserRouter>
