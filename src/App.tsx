@@ -7,6 +7,7 @@ import AreaOfExpertise from './components/AreaOfExpertise';
 import CaseStudies from './components/CaseStudies';
 import Testimonials from './components/Testimonials';
 import Specialists from './components/Specialists';
+import Mindtraining from './components/Mindtraining';
 import Footer from './components/Footer';
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <CaseStudies />
         <Testimonials />
         <Specialists />
+        <Mindtraining />  // Added new component for mindtraining section
         <Footer />
       </div>
     </BrowserRouter>

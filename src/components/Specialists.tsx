@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Button, useMediaQuery, useTheme } from '@mui/material';
 
 // Specialists data
 const specialists = [
@@ -26,6 +26,10 @@ const specialists = [
 ];
 
 const Specialists: React.FC = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // Check for mobile
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md')); // Check for tablet
+
   return (
     <section style={{ padding: '50px 0', backgroundColor: '#F5F5F5' }}>
       <Typography 
@@ -36,23 +40,33 @@ const Specialists: React.FC = () => {
           color: '#2f855a', // Dark green for the title
           fontWeight: 'bold',
           textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)', // Consistent shadow effect
-          fontSize: '2.5rem',
+          fontSize: isSmallScreen ? '1.8rem' : isMediumScreen ? '2.2rem' : '2.5rem', // Responsive font size
           letterSpacing: '0.1rem',
         }}
       >
         Get Treatment From Our Specialist
       </Typography>
-      <Grid container spacing={4} style={{ justifyContent: 'center' }}>
+      <Grid container spacing={4} style={{ justifyContent: 'center', maxWidth: '1200px', margin: '0 auto' }}>
         {specialists.map((specialist, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid 
+            item 
+            xs={12} 
+            sm={6} 
+            md={4} 
+            lg={3} 
+            key={index}
+            style={{ display: 'flex', justifyContent: 'center' }} // Centering content on mobile
+          >
             <Card 
               style={{
                 backgroundColor: '#ccf5d1', // Light green background for cards
                 borderRadius: '15px',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                padding: '20px',
+                padding: isSmallScreen ? '15px' : '20px', // Smaller padding on mobile
                 textAlign: 'center',
-                transition: 'transform 0.3s ease-in-out', // Hover animation effect
+                transition: 'transform 0.3s ease-in-out',
+                width: isSmallScreen ? '90%' : '100%', // Adjust width for small screens
+                maxWidth: '300px', // Limit max width for all cards
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
@@ -61,14 +75,14 @@ const Specialists: React.FC = () => {
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
               }}
             >
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: isSmallScreen ? '10px' : '20px' }}>
                 <img
                   src={specialist.img}
                   alt={specialist.name}
                   style={{
                     borderRadius: '50%',
-                    width: '100px',
-                    height: '100px',
+                    width: isSmallScreen ? '80px' : '100px', // Smaller image on mobile
+                    height: isSmallScreen ? '80px' : '100px', // Adjust image size based on screen
                     objectFit: 'cover',
                     marginBottom: '15px',
                   }}
@@ -77,13 +91,21 @@ const Specialists: React.FC = () => {
               <CardContent>
                 <Typography 
                   variant="h6" 
-                  style={{ fontWeight: 'bold', color: '#2f855a' }}
+                  style={{ 
+                    fontWeight: 'bold', 
+                    color: '#2f855a',
+                    fontSize: isSmallScreen ? '1rem' : '1.2rem' // Adjust font size on smaller screens
+                  }}
                 >
                   {specialist.name}
                 </Typography>
                 <Typography 
                   variant="body2" 
-                  style={{ marginBottom: '15px', color: '#6D757D' }}
+                  style={{ 
+                    marginBottom: '15px', 
+                    color: '#6D757D',
+                    fontSize: isSmallScreen ? '0.9rem' : '1rem' // Adjust font size for mobile
+                  }}
                 >
                   Experience: {specialist.experience}
                 </Typography>
@@ -94,7 +116,8 @@ const Specialists: React.FC = () => {
                     color: '#FFFFFF',
                     borderRadius: '20px',
                     textTransform: 'none',
-                    padding: '10px 20px',
+                    padding: isSmallScreen ? '8px 15px' : '10px 20px', // Adjust padding for mobile
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem', // Smaller font size on mobile
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                   }}
                 >
