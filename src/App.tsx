@@ -9,6 +9,7 @@ import Testimonials from './components/Testimonials';
 import Specialists from './components/Specialists';
 import Mindtraining from './components/Mindtraining';
 import Footer from './components/Footer';
+import ProfilePage from './components/UserDash/Profile'; // Import ProfilePage
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Specialists />
         <Mindtraining />
         <Footer />
+        <ProfilePage />
       </div>
     </BrowserRouter>
   );
