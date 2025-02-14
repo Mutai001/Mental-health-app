@@ -1,23 +1,28 @@
 import { useState } from "react";
-import { TextField, Button, Typography, Container, Paper } from "@mui/material";
+import { Avatar, Button, TextField, Card, CardContent, CircularProgress, Typography } from "@mui/material";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import Google from "@mui/icons-material/Google";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LoginIcon from "@mui/icons-material/Login";
+import { useNavigate } from "react-router-dom";
 
-const schema = z.object({
-  fullName: z.string().min(3, "Full name must be at least 3 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords must match",
-  path: ["confirmPassword"],
-});
+const schema = z
+  .object({
+    fullName: z.string().min(3, "Full name must be at least 3 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 type FormData = z.infer<typeof schema>;
 
-export default function RegistrationPage() {
+export function RegistrationPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,24 +45,59 @@ export default function RegistrationPage() {
   };
 
   return (
-    <Container maxWidth="sm" className="mt-10">
-      <Paper className="p-6 shadow-lg rounded-lg bg-white">
-        <Typography variant="h4" className="text-center font-semibold text-gray-800 mb-6">
+    <Card
+      sx={{
+        maxWidth: 500,
+        mx: "auto",
+        mt: 5,
+        p: 3,
+        textAlign: "center",
+        boxShadow: 5,
+        borderRadius: 3,
+        backgroundColor: "#FFFFFF",
+      }}
+    >
+      <CardContent>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
           Register
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <TextField label="Full Name" fullWidth {...register("fullName")} error={!!errors.fullName} helperText={errors.fullName?.message} />
-          <TextField label="Email" type="email" fullWidth {...register("email")} error={!!errors.email} helperText={errors.email?.message} />
-          <TextField label="Password" type="password" fullWidth {...register("password")} error={!!errors.password} helperText={errors.password?.message} />
-          <TextField label="Confirm Password" type="password" fullWidth {...register("confirmPassword")} error={!!errors.confirmPassword} helperText={errors.confirmPassword?.message} />
-          <Button type="submit" fullWidth variant="contained" color="primary" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+        <Avatar sx={{ width: 60, height: 60, margin: "auto", mb: 2, bgcolor: "#6DA14E" }}>
+          <LockOpenIcon />
+        </Avatar>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField fullWidth label="Full Name" variant="outlined" {...register("fullName")} error={!!errors.fullName} helperText={errors.fullName?.message} sx={{ mb: 2 }} />
+          <TextField fullWidth label="Email" variant="outlined" type="email" {...register("email")} error={!!errors.email} helperText={errors.email?.message} sx={{ mb: 2 }} />
+          <TextField fullWidth label="Password" variant="outlined" type="password" {...register("password")} error={!!errors.password} helperText={errors.password?.message} sx={{ mb: 2 }} />
+          <TextField fullWidth label="Confirm Password" variant="outlined" type="password" {...register("confirmPassword")} error={!!errors.confirmPassword} helperText={errors.confirmPassword?.message} sx={{ mb: 2 }} />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            sx={{
+              backgroundColor: "#2C423F",
+              color: "#fff",
+              textTransform: "none",
+              fontWeight: "bold",
+              ":hover": { backgroundColor: "#1F302B" },
+            }}
+          >
+            {loading ? <CircularProgress size={20} color="inherit" /> : "Register"}
           </Button>
-          {/* <Button fullWidth variant="outlined" color="inherit" startIcon={<GoogleIcon />}>
-            Register with Google
-          </Button> */}
         </form>
-      </Paper>
-    </Container>
+        <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+          Already have an account? 
+          <Button 
+            onClick={() => navigate("/login")} 
+            startIcon={<LoginIcon />} 
+            sx={{ color: "#2C423F", textTransform: "none", fontWeight: "bold" }}
+          >
+            Click here to login
+          </Button>
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
+
+export default RegistrationPage;

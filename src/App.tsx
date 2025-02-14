@@ -10,6 +10,10 @@ import Mindtraining from './components/pages/landingpage/Mindtraining';
 import Footer from './components/pages/landingpage/Footer';
 import SideNavBar from './components/UserDash/SideNavBar';
 import ProfilePage from './components/UserDash/Profile'; 
+import LoginPage from './components/Auth/LoginPage';
+import RegistrationPage from './components/Auth/RegistrationPage';
+import NotFoundPage from './components/notfound/NotFoundPage';
+
 
 const App: React.FC = () => {
   return (
@@ -43,6 +47,15 @@ const App: React.FC = () => {
         </div>
       <div id='profile'>
         <ProfilePage />
+        </div>
+      <div id='login'>
+        <LoginPage />
+        </div>
+      <div id='register'>
+        <RegistrationPage />
+        </div>
+      <div id='notfound'>
+        <NotFoundPage />
         </div>
     </BrowserRouter>
 
