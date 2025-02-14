@@ -1,134 +1,105 @@
-import React from 'react';
-import { Card, CardContent, Typography, Grid, Button, useMediaQuery, useTheme } from '@mui/material';
+// import React from 'react';
+import { Card, CardContent, Typography, Grid, Button, Box, Stack } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa';
 
-// Specialists data
 const specialists = [
   {
-    name: 'Dr. Rachel Porter',
+    name: 'Dr. Faith Peter',
     experience: '10 Years',
-    img: 'https://media.istockphoto.com/id/1351031406/photo/handsome-mature-man-with-arms-crossed-studio-portrait-isolated-on-grey-background.jpg?s=612x612&w=0&k=20&c=SKXxsNfRFoGn_Fwjxz7ZFxanpXpAsO4xQVNznDy1xcM=',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTggejiIMZ2n0rLLLaL8rEkX-PVchTbqo3d6g&s',
+    available: true,
   },
   {
-    name: 'Dr. Roy Lawson',
+    name: 'Dr. Ray Lawson',
     experience: '8 Years',
-    img: 'https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAa-ZLtaVSmgMFvWul5lhfmF5kkudgjRN7gQ&s',
+    available: false,
   },
   {
-    name: 'Dr. Dorothy Jordan',
+    name: 'Dr. Christine Jordan',
     experience: '6 Years',
-    img: 'https://img.freepik.com/free-photo/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair_285396-896.jpg',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJRkTtVMKhJJeJSYgXJoKod7f81cgLmX-XnA&s',
+    available: true,
   },
   {
-    name: 'Dr. Jane Freeman',
+    name: 'Dr. Cyrus Freeman',
     experience: '4 Years',
-    img: 'https://media.istockphoto.com/id/1317784594/photo/headshot-of-mature-50-years-old-asian-business-woman-on-grey-background.jpg?s=612x612&w=0&k=20&c=eOmdf5BbEG75m9MBSTvhjA5uMDmUj0zDtXd3lv0nm8U=',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj9OWhpKZluSAJ2kpNJzLYGNVn41kb_MQEUg&s',
+    available: false,
   },
 ];
 
+const fadeIn = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
 const Specialists: React.FC = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // Check for mobile
-  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md')); // Check for tablet
+  const navigate = useNavigate();
 
   return (
-    <section style={{ padding: '50px 0', backgroundColor: '#F5F5F5' }}>
-      <Typography 
-        variant="h4" 
-        style={{
-          textAlign: 'center',
-          marginBottom: '30px',
-          color: '#2f855a', // Dark green for the title
-          fontWeight: 'bold',
-          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)', // Consistent shadow effect
-          fontSize: isSmallScreen ? '1.8rem' : isMediumScreen ? '2.2rem' : '2.5rem', // Responsive font size
-          letterSpacing: '0.1rem',
-        }}
+    <Box sx={{ backgroundColor: '#2C423F', color: '#FFFFFF', py: 12, px: 4 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{ fontWeight: 'bold', fontSize: { xs: '2rem', md: '3rem' }, mb: 6 }}
       >
-        Get Treatment From Our Specialist
+        Meet Our Specialists
       </Typography>
-      <Grid container spacing={4} style={{ justifyContent: 'center', maxWidth: '1200px', margin: '0 auto' }}>
+      <Grid container spacing={4} justifyContent="center">
         {specialists.map((specialist, index) => (
-          <Grid 
-            item 
-            xs={12} 
-            sm={6} 
-            md={4} 
-            lg={3} 
-            key={index}
-            style={{ display: 'flex', justifyContent: 'center' }} // Centering content on mobile
-          >
-            <Card 
-              style={{
-                backgroundColor: '#ccf5d1', // Light green background for cards
-                borderRadius: '15px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                padding: isSmallScreen ? '15px' : '20px', // Smaller padding on mobile
-                textAlign: 'center',
-                transition: 'transform 0.3s ease-in-out',
-                width: isSmallScreen ? '90%' : '100%', // Adjust width for small screens
-                maxWidth: '300px', // Limit max width for all cards
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
-              }}
+          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              variants={fadeIn}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
             >
-              <div style={{ marginBottom: isSmallScreen ? '10px' : '20px' }}>
-                <img
+              <Card sx={{ backgroundColor: '#3D5A5A', color: '#FFFFFF', borderRadius: 3, p: 3, textAlign: 'center' }}>
+                <motion.img
                   src={specialist.img}
                   alt={specialist.name}
-                  style={{
-                    borderRadius: '50%',
-                    width: isSmallScreen ? '80px' : '100px', // Smaller image on mobile
-                    height: isSmallScreen ? '80px' : '100px', // Adjust image size based on screen
-                    objectFit: 'cover',
-                    marginBottom: '15px',
-                  }}
+                  className="rounded-full w-28 h-28 object-cover mx-auto mb-4"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  style={{ borderRadius: '50%', border: '4px solid #6DA14E' }}
                 />
-              </div>
-              <CardContent>
-                <Typography 
-                  variant="h6" 
-                  style={{ 
-                    fontWeight: 'bold', 
-                    color: '#2f855a',
-                    fontSize: isSmallScreen ? '1rem' : '1.2rem' // Adjust font size on smaller screens
-                  }}
-                >
-                  {specialist.name}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  style={{ 
-                    marginBottom: '15px', 
-                    color: '#6D757D',
-                    fontSize: isSmallScreen ? '0.9rem' : '1rem' // Adjust font size for mobile
-                  }}
-                >
-                  Experience: {specialist.experience}
-                </Typography>
-                <Button 
-                  variant="contained" 
-                  style={{
-                    backgroundColor: '#2f855a', // Dark green for button
-                    color: '#FFFFFF',
-                    borderRadius: '20px',
-                    textTransform: 'none',
-                    padding: isSmallScreen ? '8px 15px' : '10px 20px', // Adjust padding for mobile
-                    fontSize: isSmallScreen ? '0.8rem' : '1rem', // Smaller font size on mobile
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  }}
-                >
-                  Book an Appointment
-                </Button>
-              </CardContent>
-            </Card>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#6DA14E' }}>{specialist.name}</Typography>
+                  <Typography variant="body2" sx={{ color: '#D1E8E2', mb: 1 }}>
+                    Experience: {specialist.experience}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ fontWeight: 'bold', color: specialist.available ? '#6DA14E' : '#E57373' }}
+                  >
+                    {specialist.available ? 'Available' : 'Currently Busy'}
+                  </Typography>
+                  <Stack direction="row" justifyContent="center" spacing={2} mt={2}>
+                    <FaLinkedin className="cursor-pointer hover:text-blue-500" size={20} />
+                    <FaTwitter className="cursor-pointer hover:text-blue-400" size={20} />
+                    <FaFacebook className="cursor-pointer hover:text-blue-600" size={20} />
+                  </Stack>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="contained"
+                      sx={{ mt: 3, backgroundColor: '#6DA14E', borderRadius: '50px', '&:hover': { backgroundColor: '#5A8F3E' } }}
+                      onClick={() => navigate('/register')}
+                    >
+                      Book an Appointment
+                    </Button>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </Grid>
         ))}
       </Grid>
-    </section>
+    </Box>
   );
 };
 
