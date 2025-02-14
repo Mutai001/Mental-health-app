@@ -1,6 +1,7 @@
-import React from "react";
+// import React from "react";
 import { Box, Typography, Button, Grid, Stack } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -8,6 +9,8 @@ const fadeIn = {
 };
 
 const HeroSection: React.FC = () => {
+  const navigate = useNavigate(); // Initialize navigation
+
   return (
     <Box
       sx={{
@@ -55,6 +58,7 @@ const HeroSection: React.FC = () => {
                     borderRadius: "50px",
                     "&:hover": { backgroundColor: "#5A8F3E" },
                   }}
+                  onClick={() => navigate("/register")} // Navigate to Registration
                 >
                   Book an Appointment
                 </Button>
@@ -70,6 +74,7 @@ const HeroSection: React.FC = () => {
                     borderRadius: "50px",
                     "&:hover": { borderColor: "#5A8F3E", color: "#5A8F3E" },
                   }}
+                  onClick={() => navigate("/casestudies")} // Navigate to Case Studies
                 >
                   Learn More
                 </Button>
