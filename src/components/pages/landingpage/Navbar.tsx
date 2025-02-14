@@ -23,13 +23,11 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { label: 'home', path: '/' },
-    { label: 'casestudies', path: '/casestudies' },
-    { label: 'therapist', path: '/specialists' },
+    { label: 'Home', path: '/' },
+    { label: 'Case Studies', path: '/casestudies' },
+    { label: 'Therapist', path: '/specialists' },
     { label: 'About', path: '/aboutus' },
-    { label: 'ask ai', path: '/ask-ai' },
-
-
+    { label: 'Ask AI', path: '/ask-ai' },
   ];
 
   return (
@@ -45,14 +43,18 @@ const Navbar = () => {
         {/* Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-            <img src={mindfulLogo} alt="Mindful Logo" style={{ width: '40px', marginRight: '0.5rem' }} />
+            <img
+              src={mindfulLogo}
+              alt="Mindful Logo"
+              style={{ width: '40px', marginRight: '0.5rem' }}
+            />
             <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FFFFFF' }}>
               Mindful
             </Typography>
           </Link>
         </Box>
 
-        {/* Navigation Links */}
+        {/* Navigation Links (Desktop) */}
         <Box
           sx={{
             backgroundColor: '#3B544D',
@@ -80,11 +82,11 @@ const Navbar = () => {
           ))}
         </Box>
 
-        {/* Contact Us Button */}
+        {/* Contact Us Button (Desktop) */}
         <Button
           variant="outlined"
           component={Link}
-          to="/contact"
+          to="/contactus" // Corrected to match the route
           sx={{
             display: { xs: 'none', md: 'block' },
             color: '#FFFFFF',
@@ -97,8 +99,14 @@ const Navbar = () => {
           Contact Us →
         </Button>
 
-        {/* Mobile Menu */}
-        <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ display: { xs: 'block', md: 'none' } }}>
+        {/* Mobile Menu Button */}
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={handleDrawerToggle}
+          sx={{ display: { xs: 'block', md: 'none' } }}
+        >
           <MenuIcon />
         </IconButton>
       </Toolbar>
@@ -110,7 +118,13 @@ const Navbar = () => {
             {navLinks.map(({ label, path }) => (
               <ListItem key={label} disablePadding>
                 <ListItemText>
-                  <Button component={Link} to={path} sx={{ color: '#2C423F', width: '100%' }}>{label}</Button>
+                  <Button
+                    component={Link}
+                    to={path}
+                    sx={{ color: '#2C423F', width: '100%', textAlign: 'left' }}
+                  >
+                    {label}
+                  </Button>
                 </ListItemText>
               </ListItem>
             ))}
@@ -118,7 +132,7 @@ const Navbar = () => {
               <ListItemText>
                 <Button
                   component={Link}
-                  to="/contactus"
+                  to="/contactus" // Corrected to match the route
                   sx={{
                     color: '#FFFFFF',
                     backgroundColor: '#6DA14E',
