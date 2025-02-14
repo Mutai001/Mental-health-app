@@ -35,8 +35,8 @@ const ContactUs: React.FC = () => {
             </Typography>
             <Stack spacing={2} sx={{ marginTop: "2rem" }}>
               <Typography>Email: support@mindfulai.com</Typography>
-              <Typography>Phone: +123 456 7890</Typography>
-              <Typography>Location: 123 Mindful St, Wellness City</Typography>
+              <Typography>Phone: +254722227154</Typography>
+              <Typography>Location: 30100 Kutus, Kirinyaga Kenya</Typography>
             </Stack>
           </motion.div>
         </Grid>
