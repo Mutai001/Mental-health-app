@@ -26,7 +26,7 @@ const Navbar = () => {
     { label: 'home', path: '/' },
     { label: 'casestudies', path: '/casestudies' },
     { label: 'therapist', path: '/specialists' },
-    { label: 'About', path: '/about' },
+    { label: 'About', path: '/aboutus' },
     { label: 'ask ai', path: '/ask ai' },
 
 

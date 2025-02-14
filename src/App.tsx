@@ -10,6 +10,7 @@ import Footer from './components/pages/landingpage/Footer';
 import NotFoundPage from './components/notfound/NotFoundPage';
 import RegistrationPage from './components/Auth/RegistrationPage';
 import LoginPage from './components/Auth/LoginPage';
+import AboutUs from './components/pages/landingpage/AboutUs';
 
 const App: React.FC = () => {
   return (
@@ -55,6 +56,7 @@ const App: React.FC = () => {
         <Route path='/specialists' element={<Specialists />} />
         <Route path='/mindtraining' element={<Mindtraining />} />
         <Route path='/footer' element={<Footer />} />
+        <Route path='/aboutus' element={<AboutUs />} />
         
       </Routes>
     </BrowserRouter>
