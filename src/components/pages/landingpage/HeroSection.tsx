@@ -1,128 +1,99 @@
-import { Box, Typography, Button, Grid, Stack } from '@mui/material';
-import personImage from '../../../assets/images/Serious man.png';
-import trustpilot from '../../../assets/images/trustpilot-hd-logo.png';
-const HeroSection = () => {
+import React from "react";
+import { Box, Typography, Button, Grid, Stack } from "@mui/material";
+import { motion } from "framer-motion";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
+const HeroSection: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#2C423F',
-        color: '#FFFFFF',
-        padding: '4rem 2rem',
-        minHeight: '100vh',
+        backgroundColor: "#2C423F",
+        color: "#FFFFFF",
+        padding: "4rem 2rem",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <Grid container spacing={4} alignItems="center">
         {/* Left Side: Text and Buttons */}
         <Grid item xs={12} md={6}>
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: '2.5rem', md: '4rem' },
-              fontWeight: 'bold',
-              lineHeight: 1.2,
-            }}
-          >
-            Embrace Your <br /> Mental Health
-          </Typography>
-          <Typography sx={{ marginTop: '1rem', maxWidth: '500px' }}>
-            We understand the challenges you face. That's why we put people first in everything.
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{
-              marginTop: '2rem',
-              backgroundColor: '#6DA14E',
-              padding: '1rem 2rem',
-              fontSize: '1rem',
-              borderRadius: '50px',
-              '&:hover': {
-                backgroundColor: '#5A8F3E',
-              },
-            }}
-          >
-            Book an Appointment
-          </Button>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '1.5rem' }}>
-            <img src={trustpilot} alt="Trustpilot" style={{ height: '24px' }} />
-            <Typography sx={{ marginLeft: '0.5rem' }}>★ 4.8</Typography>
-          </Box>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "2rem", md: "3.5rem" },
+                fontWeight: "bold",
+                lineHeight: 1.2,
+              }}
+            >
+              Prioritize Your Mental Well-being
+            </Typography>
+            <Typography sx={{ marginTop: "1rem", maxWidth: "500px" }}>
+              Mental health is just as important as physical health. We provide
+              professional support tailored to your needs.
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{
+                marginTop: "2rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#6DA14E",
+                    padding: { xs: "0.8rem 1.5rem", md: "1rem 2rem" },
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                    borderRadius: "50px",
+                    "&:hover": { backgroundColor: "#5A8F3E" },
+                  }}
+                >
+                  Book an Appointment
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: "#6DA14E",
+                    borderColor: "#6DA14E",
+                    padding: { xs: "0.8rem 1.5rem", md: "1rem 2rem" },
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                    borderRadius: "50px",
+                    "&:hover": { borderColor: "#5A8F3E", color: "#5A8F3E" },
+                  }}
+                >
+                  Learn More
+                </Button>
+              </motion.div>
+            </Stack>
+          </motion.div>
         </Grid>
 
-        {/* Right Side: Centered Image */}
+        {/* Right Side: Image */}
         <Grid item xs={12} md={6} container justifyContent="center">
-          <img
-            src={personImage}
-            alt="Person"
+          <motion.img
+            src="https://media.kasperskydaily.com/wp-content/uploads/sites/92/2022/06/07084322/312_How_AI_can_make_therapy_better-1200x672.jpg"
+            alt="Mental Health"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0, transition: { duration: 0.8 } }}
             style={{
-              width: '100%',
-              maxWidth: '450px',
+              width: "100%",
+              maxWidth: "500px",
+              borderRadius: "10px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             }}
           />
         </Grid>
       </Grid>
-
-      {/* "We understand the challenges" section */}
-      <Box
-        sx={{
-          marginTop: '2rem',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: '#2C423F',
-            padding: '1.5rem 2.5rem',
-            borderRadius: '10px',
-            maxWidth: '350px',
-            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-            textAlign: 'center',
-          }}
-        >
-          <Typography variant="body1" sx={{ fontSize: '1.2rem', color: '#FFFFFF' }}>
-            We understand the challenges you face. That's why we put people first in everything.
-          </Typography>
-          <Button
-            variant="text"
-            sx={{
-              marginTop: '1rem',
-              color: '#6DA14E',
-              fontWeight: 'bold',
-              textTransform: 'none',
-            }}
-          >
-            All Services →
-          </Button>
-        </Box>
-      </Box>
-
-      {/* Counselling Options */}
-      <Box
-        sx={{
-          marginTop: '2rem',
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '1.5rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        {['Family Counselling', 'Individual Therapy', 'Corporate Counselling'].map((service) => (
-          <Stack
-            key={service}
-            sx={{
-              backgroundColor: '#6DA14E',
-              color: '#FFFFFF',
-              padding: '1rem 2rem',
-              borderRadius: '50px',
-              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-              textAlign: 'center',
-              width: { xs: '100%', sm: '45%', md: '30%' },
-            }}
-          >
-            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{service}</Typography>
-          </Stack>
-        ))}
-      </Box>
     </Box>
   );
 };

@@ -9,7 +9,7 @@ import Specialists from './components/pages/landingpage/Specialists';
 import Mindtraining from './components/pages/landingpage/Mindtraining';
 import Footer from './components/pages/landingpage/Footer';
 import SideNavBar from './components/UserDash/SideNavBar';
-// import ProfilePage from './components/UserDash/Profile'; 
+import ProfilePage from './components/UserDash/Profile'; 
 
 const App: React.FC = () => {
   return (
@@ -41,7 +41,11 @@ const App: React.FC = () => {
       <div id='sidenav'>
         <SideNavBar />
         </div>
+      <div id='profile'>
+        <ProfilePage />
+        </div>
     </BrowserRouter>
+
   );
 };
 
