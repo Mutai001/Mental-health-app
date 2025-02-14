@@ -3,7 +3,7 @@ import { Avatar, Button, TextField, Card, CardContent, CircularProgress, Typogra
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SaveIcon from "@mui/icons-material/Save";
 
-const ProfilePage = () => {
+const UserProfilePage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
@@ -107,4 +107,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default UserProfilePage;

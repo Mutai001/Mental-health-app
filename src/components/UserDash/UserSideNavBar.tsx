@@ -21,7 +21,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const drawerWidth = 240;
 
-const SideNavBar: React.FC = () => {
+const UserSideNavBar: React.FC = () => {
   const [open, setOpen] = useState(true);
   const handleToggle = () => setOpen(!open);
 
@@ -109,4 +109,4 @@ const SideNavBar: React.FC = () => {
   );
 };
 
-export default SideNavBar;
+export default UserSideNavBar;
