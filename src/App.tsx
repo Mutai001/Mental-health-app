@@ -11,13 +11,12 @@ import NotFoundPage from './components/notfound/NotFoundPage';
 import RegistrationPage from './components/Auth/RegistrationPage';
 import LoginPage from './components/Auth/LoginPage';
 
-
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        {/* Landing Page */}
+        {/* Landing Page with all sections */}
         <Route
           path="/"
           element={
@@ -44,18 +43,19 @@ const App: React.FC = () => {
             </>
           }
         />
-        {/* navigation in landingpage */}
-        <Route path='/home' element={<HeroSection />} />
-        <Route path='/services' element={<AreaOfExpertise />} />
-        <Route path='/casestudies' element={<CaseStudies />} />
-        <Route path='/testimonials' element={<Testimonials />} />
-        <Route path='/team' element={<Specialists />} />
-        <Route path='/mindtraining' element={<Mindtraining />} />
-        {/* Catch-All Route */}
-        <Route path="*" element={<NotFoundPage />} />
         {/* Authentication Routes */}
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
+        {/* Catch-All Route */}
+        <Route path="*" element={<NotFoundPage />} />
+        {/* route component */}
+        <Route path='/areaofexpertise' element={<AreaOfExpertise />} />
+        <Route path='/casestudies' element={<CaseStudies />} />
+        <Route path='/testimonials' element={<Testimonials />} />
+        <Route path='/specialists' element={<Specialists />} />
+        <Route path='/mindtraining' element={<Mindtraining />} />
+        <Route path='/footer' element={<Footer />} />
+        
       </Routes>
     </BrowserRouter>
   );
