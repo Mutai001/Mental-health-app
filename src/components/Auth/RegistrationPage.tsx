@@ -3,7 +3,7 @@ import { TextField, Button, Typography, Container, Paper } from "@mui/material";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import GoogleIcon from "@mui/icons-material/Google";
+// import Google from "@mui/icons-material/Google";
 
 const schema = z.object({
   fullName: z.string().min(3, "Full name must be at least 3 characters"),
@@ -53,9 +53,9 @@ export default function RegistrationPage() {
           <Button type="submit" fullWidth variant="contained" color="primary" disabled={loading}>
             {loading ? "Registering..." : "Register"}
           </Button>
-          <Button fullWidth variant="outlined" color="inherit" startIcon={<GoogleIcon />}>
+          {/* <Button fullWidth variant="outlined" color="inherit" startIcon={<GoogleIcon />}>
             Register with Google
-          </Button>
+          </Button> */}
         </form>
       </Paper>
     </Container>
