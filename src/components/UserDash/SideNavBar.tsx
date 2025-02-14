@@ -94,7 +94,7 @@ const SideNavBar: React.FC = () => {
         </List>
       </Drawer>
       {/* Main Content */}
-      <Box
+      {/* <Box
         component="main"
         sx={{
           flexGrow: 1,
@@ -104,8 +104,7 @@ const SideNavBar: React.FC = () => {
         }}
       >
         <Toolbar />
-        <h1>Welcome to the Mindful Platform</h1>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
