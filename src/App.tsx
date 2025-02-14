@@ -11,6 +11,8 @@ import NotFoundPage from './components/notfound/NotFoundPage';
 import RegistrationPage from './components/Auth/RegistrationPage';
 import LoginPage from './components/Auth/LoginPage';
 import AboutUs from './components/pages/landingpage/AboutUs';
+import AskAI from './components/pages/landingpage/AskAI';
+import ContactUs from './components/pages/landingpage/ContactUs';
 
 const App: React.FC = () => {
   return (
@@ -57,6 +59,8 @@ const App: React.FC = () => {
         <Route path='/mindtraining' element={<Mindtraining />} />
         <Route path='/footer' element={<Footer />} />
         <Route path='/aboutus' element={<AboutUs />} />
+        <Route path='/ask-ai' element={<AskAI />} />
+        <Route path='/contactus' element={<ContactUs />} />
         
       </Routes>
     </BrowserRouter>

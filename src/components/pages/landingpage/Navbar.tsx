@@ -27,7 +27,7 @@ const Navbar = () => {
     { label: 'casestudies', path: '/casestudies' },
     { label: 'therapist', path: '/specialists' },
     { label: 'About', path: '/aboutus' },
-    { label: 'ask ai', path: '/ask ai' },
+    { label: 'ask ai', path: '/ask-ai' },
 
 
   ];
@@ -118,7 +118,7 @@ const Navbar = () => {
               <ListItemText>
                 <Button
                   component={Link}
-                  to="/contact"
+                  to="/contactus"
                   sx={{
                     color: '#FFFFFF',
                     backgroundColor: '#6DA14E',
