@@ -11,7 +11,7 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material';
-import mindfulLogo from '../assets/images/mindful logo.png'; // Import your logo here
+import mindfulLogo from '../../../assets/images/mindful logo.png'; // Import your logo here
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as ScrollLink } from 'react-scroll'; // For smooth scrolling
 

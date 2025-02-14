@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Grid, Stack } from '@mui/material';
-import personImage from '../assets/images/Serious man.png';
-import trustpilot from '../assets/images/trustpilot-hd-logo.png';
+import personImage from '../../../assets/images/Serious man.png';
+import trustpilot from '../../../assets/images/trustpilot-hd-logo.png';
 const HeroSection = () => {
   return (
     <Box

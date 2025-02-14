@@ -4,7 +4,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Box from '@mui/material/Box';
-import logo from '../assets/images/mindful logo.png'
+import logo from '../../../assets/images/mindful logo.png'
 
 // Placeholder logo (you can replace this with an actual logo image)
 const Logo = () => (

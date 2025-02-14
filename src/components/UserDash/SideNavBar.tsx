@@ -10,6 +10,7 @@ import {
   Toolbar,
   Box,
   Divider,
+  Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -21,11 +22,9 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 const drawerWidth = 240;
 
 const SideNavBar: React.FC = () => {
-  // Toggle state for the drawer (open/closed)
   const [open, setOpen] = useState(true);
   const handleToggle = () => setOpen(!open);
 
-  // Navigation items with corresponding icons
   const navItems = [
     { text: "Dashboard", icon: <DashboardIcon /> },
     { text: "Profile", icon: <AccountCircleIcon /> },
@@ -41,50 +40,60 @@ const SideNavBar: React.FC = () => {
         anchor="left"
         open={open}
         sx={{
-          width: open ? drawerWidth : 60,
+          width: open ? drawerWidth : 70,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: open ? drawerWidth : 60,
+            width: open ? drawerWidth : 70,
+            transition: "width 0.3s ease-in-out",
             boxSizing: "border-box",
-            backgroundColor: "primary.main", // Uses the primary color from your theme
+            backgroundColor: "#2C423F",
             color: "white",
+            borderRight: "1px solid #3B544D",
           },
         }}
       >
-        {/* Toolbar for spacing and toggle button */}
-        <Toolbar>
+        {/* Toolbar with Toggle Button */}
+        <Toolbar sx={{ justifyContent: "space-between", px: 2 }}>
+          {open && <Box sx={{ fontWeight: "bold", color: "#6DA14E" }}>Mindful</Box>}
           <IconButton onClick={handleToggle} sx={{ color: "white" }}>
             <MenuIcon />
           </IconButton>
         </Toolbar>
-        <Divider />
+        <Divider sx={{ borderColor: "#3B544D" }} />
         <List>
           {navItems.map((item, index) => (
-            <ListItem key={index} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+            <Tooltip title={!open ? item.text : ""} placement="right" key={index}>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "white",
+                    minHeight: 50,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "#6DA14E",
+                      color: "#FFFFFF",
+                    },
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                {open && <ListItemText primary={item.text} />}
-              </ListItemButton>
-            </ListItem>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 2 : "auto",
+                      justifyContent: "center",
+                      color: "white",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  {open && <ListItemText primary={item.text} />}
+                </ListItemButton>
+              </ListItem>
+            </Tooltip>
           ))}
         </List>
       </Drawer>
-      {/* Main content area */}
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -95,8 +104,7 @@ const SideNavBar: React.FC = () => {
         }}
       >
         <Toolbar />
-        {/* Insert your main application content here */}
-        <h1>Welcome to the Mental Health Platform</h1>
+        <h1>Welcome to the Mindful Platform</h1>
       </Box>
     </Box>
   );
