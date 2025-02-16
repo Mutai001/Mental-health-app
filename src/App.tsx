@@ -15,6 +15,7 @@ import AskAI from './components/pages/landingpage/AskAI';
 import ContactUs from './components/pages/landingpage/ContactUs';
 import UserDashboard from './components/UserDash/UserDashboard';
 import AdminDashboard from './components/AdminDash/AdminDashboard';
+import TherapistDashboard from './components/therapist/TherapistDashboard';
 
 const App: React.FC = () => {
   return (
@@ -65,6 +66,7 @@ const App: React.FC = () => {
         <Route path='/contactus' element={<ContactUs />} />
         <Route path='/user' element={<UserDashboard />} />
         <Route path='/admin' element={<AdminDashboard />} />
+        <Route path='/therapist' element={<TherapistDashboard />} />
       </Routes>
     </BrowserRouter>
   );
