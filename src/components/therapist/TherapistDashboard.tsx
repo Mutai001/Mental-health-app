@@ -44,7 +44,7 @@ export function TherapistDashboard() {
   const menuItems = [
     { text: "Profile", icon: <PersonIcon />, route: "/therapist-profile" },
     { text: "Appointments", icon: <CalendarMonthIcon />, route: "/appointments" },
-    { text: "Messages", icon: <MessageIcon />, route: "/messages" },
+    { text: "Messages", icon: <MessageIcon />, route: "/therapist-messages" },
     { text: "Clients", icon: <PsychologyIcon />, route: "/clients" },
     { text: "Payments", icon: <PaymentIcon />, route: "/therapist-payments" },
     { text: "Settings", icon: <SettingsIcon />, route: "/settings" },

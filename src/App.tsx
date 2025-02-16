@@ -18,6 +18,7 @@ import AdminDashboard from './components/AdminDash/AdminDashboard';
 import TherapistDashboard from './components/therapist/TherapistDashboard';
 import UserProfilePage from './components/UserDash/UserProfile';
 import TherapistProfile from './components/therapist/TherapistProfile';
+import MessagesSection from './components/therapist/TherapistMessages';
 
 const App: React.FC = () => {
   return (
@@ -70,8 +71,8 @@ const App: React.FC = () => {
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path='/therapist' element={<TherapistDashboard />} />
         <Route path='/userprofile' element={<UserProfilePage />}/>
-        <Route path='/therapist-profile' element={<TherapistProfile />}
-        />
+        <Route path='/therapist-profile' element={<TherapistProfile />}/>
+        <Route path='/therapist-messages' element={<MessagesSection />}/>
       </Routes>
     </BrowserRouter>
   );
