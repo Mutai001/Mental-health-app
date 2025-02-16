@@ -37,7 +37,7 @@ export function AdminDashboard() {
   };
 
   const adminMenuItems = [
-    { text: "User Management", icon: <PeopleIcon />, route: "/admin/users" },
+    { text: "User Management", icon: <PeopleIcon />, route: "/admin-user-management" },
     { text: "Reports", icon: <BarChartIcon />, route: "/admin/reports" },
     { text: "Appointments", icon: <CalendarTodayIcon />, route: "/admin/appointments" },
     { text: "Payments", icon: <PaymentIcon />, route: "/admin/payments" },

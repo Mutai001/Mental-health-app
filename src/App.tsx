@@ -26,6 +26,9 @@ import Appointments from './components/therapist/Appointments';
 //UserDashboard
 import UserBookings from './components/UserDash/UserBooking';
 
+//AdminDashboard
+import AdminUserManagement from './components/AdminDash/AdminUserManagement';
+
 const App: React.FC = () => {
   return (
     <BrowserRouter>
@@ -85,6 +88,10 @@ const App: React.FC = () => {
         <Route path='/appointments' element={<Appointments />}/>
         //UserDashboard
         <Route path='/user-bookings' element={<UserBookings/>}/>
+
+
+        //AdminDashboard
+        <Route path='/admin-user-management' element={<AdminUserManagement/>}/> 
       </Routes>
     </BrowserRouter>
   );
