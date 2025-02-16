@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Avatar,
   Card,
   CardContent,
   Typography,
@@ -11,10 +10,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  IconButton,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -31,6 +31,7 @@ const fadeIn = {
 export function TherapistDashboard() {
   const navigate = useNavigate();
   const [, setLoading] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleLogout = () => {
     setLoading(true);
@@ -56,28 +57,29 @@ export function TherapistDashboard() {
       <Drawer
         variant="permanent"
         sx={{
-          width: 250,
+          width: open ? 250 : 80,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: 250,
+            width: open ? 250 : 80,
             boxSizing: "border-box",
             backgroundColor: "#1F302B",
             color: "white",
+            transition: "width 0.3s ease-in-out",
           },
         }}
       >
-        <Box sx={{ textAlign: "center", p: 2 }}>
-          <Avatar sx={{ bgcolor: "#6DA14E", width: 60, height: 60, mx: "auto" }}>
-            <DashboardIcon />
-          </Avatar>
-          <Typography variant="h6" sx={{ mt: 1 }}>Therapist Dashboard</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
+          {open && <Typography variant="h6">Therapist Dashboard</Typography>}
+          <IconButton onClick={() => setOpen(!open)} sx={{ color: "white" }}>
+            <MenuIcon />
+          </IconButton>
         </Box>
         <List>
           {menuItems.map(({ text, icon, route }) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => navigate(route)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
+                {open && <ListItemText primary={text} />}
               </ListItemButton>
             </ListItem>
           ))}
@@ -86,7 +88,7 @@ export function TherapistDashboard() {
               <ListItemIcon sx={{ color: "red" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              {open && <ListItemText primary="Logout" />}
             </ListItemButton>
           </ListItem>
         </List>
