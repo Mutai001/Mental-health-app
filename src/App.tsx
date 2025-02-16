@@ -23,6 +23,8 @@ import Patients from './components/therapist/Patients';
 import TherapistSettings from './components/therapist/TherapistSettings';
 import TherapistPayments from './components/therapist/TherapistPayments';
 import Appointments from './components/therapist/Appointments';
+//UserDashboard
+import UserBookings from './components/UserDash/UserBooking';
 
 const App: React.FC = () => {
   return (
@@ -81,6 +83,8 @@ const App: React.FC = () => {
         <Route path='/therapist-settings' element={<TherapistSettings />}/>
         <Route path='/therapist-payments' element={<TherapistPayments />}/>
         <Route path='/appointments' element={<Appointments />}/>
+        //UserDashboard
+        <Route path='/user-bookings' element={<UserBookings/>}/>
       </Routes>
     </BrowserRouter>
   );
