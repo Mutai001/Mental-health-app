@@ -47,7 +47,7 @@ export function TherapistDashboard() {
     { text: "Messages", icon: <MessageIcon />, route: "/therapist-messages" },
     { text: "Patients", icon: <PsychologyIcon />, route: "/patients" },
     { text: "Payments", icon: <PaymentIcon />, route: "/therapist-payments" },
-    { text: "Settings", icon: <SettingsIcon />, route: "/settings" },
+    { text: "Settings", icon: <SettingsIcon />, route: "/therapist-settings" },
   ];
 
   return (
