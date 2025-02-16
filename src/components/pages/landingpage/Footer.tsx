@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
         {/* Copyright Text */}
         <motion.div variants={fadeInUp}>
           <Typography variant="body2" style={{ marginBottom: '16px', color: '#D1D5DB' }}>
-            © 2023. All Rights Reserved. Privacy Policy | Terms & Conditions
+            © 2025. All Rights Reserved. Privacy Policy | Terms & Conditions
           </Typography>
         </motion.div>
 

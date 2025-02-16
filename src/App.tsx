@@ -13,6 +13,7 @@ import LoginPage from './components/Auth/LoginPage';
 import AboutUs from './components/pages/landingpage/AboutUs';
 import AskAI from './components/pages/landingpage/AskAI';
 import ContactUs from './components/pages/landingpage/ContactUs';
+import UserDashboard from './components/UserDash/UserDashboard';
 
 const App: React.FC = () => {
   return (
@@ -61,6 +62,7 @@ const App: React.FC = () => {
         <Route path='/aboutus' element={<AboutUs />} />
         <Route path='/ask-ai' element={<AskAI />} />
         <Route path='/contactus' element={<ContactUs />} />
+        <Route path='/user' element={<UserDashboard />} />
         
       </Routes>
     </BrowserRouter>
