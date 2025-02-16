@@ -14,6 +14,7 @@ import AboutUs from './components/pages/landingpage/AboutUs';
 import AskAI from './components/pages/landingpage/AskAI';
 import ContactUs from './components/pages/landingpage/ContactUs';
 import UserDashboard from './components/UserDash/UserDashboard';
+import AdminDashboard from './components/AdminDash/AdminDashboard';
 
 const App: React.FC = () => {
   return (
@@ -63,7 +64,7 @@ const App: React.FC = () => {
         <Route path='/ask-ai' element={<AskAI />} />
         <Route path='/contactus' element={<ContactUs />} />
         <Route path='/user' element={<UserDashboard />} />
-        
+        <Route path='/admin' element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );
