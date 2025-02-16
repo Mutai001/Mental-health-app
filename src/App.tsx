@@ -16,6 +16,8 @@ import ContactUs from './components/pages/landingpage/ContactUs';
 import UserDashboard from './components/UserDash/UserDashboard';
 import AdminDashboard from './components/AdminDash/AdminDashboard';
 import TherapistDashboard from './components/therapist/TherapistDashboard';
+import UserProfilePage from './components/UserDash/UserProfile';
+import TherapistProfile from './components/therapist/TherapistProfile';
 
 const App: React.FC = () => {
   return (
@@ -67,6 +69,9 @@ const App: React.FC = () => {
         <Route path='/user' element={<UserDashboard />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path='/therapist' element={<TherapistDashboard />} />
+        <Route path='/userprofile' element={<UserProfilePage />}/>
+        <Route path='/therapist-profile' element={<TherapistProfile />}
+        />
       </Routes>
     </BrowserRouter>
   );

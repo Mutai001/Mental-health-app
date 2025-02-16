@@ -38,7 +38,7 @@ export function UserDashboard() {
   };
 
   const menuItems = [
-    { text: "Profile", icon: <PersonIcon />, route: "/profile" },
+    { text: "Profile", icon: <PersonIcon />, route: "/userprofile" },
     { text: "Bookings", icon: <BookOnlineIcon />, route: "/bookings" },
     { text: "Therapists", icon: <PsychologyIcon />, route: "/therapists" },
     { text: "Ask AI", icon: <HelpIcon />, route: "/ask-ai" },
