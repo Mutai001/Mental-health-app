@@ -19,6 +19,7 @@ import TherapistDashboard from './components/therapist/TherapistDashboard';
 import UserProfilePage from './components/UserDash/UserProfile';
 import TherapistProfile from './components/therapist/TherapistProfile';
 import MessagesSection from './components/therapist/TherapistMessages';
+import Patients from './components/therapist/Patients';
 
 const App: React.FC = () => {
   return (
@@ -73,6 +74,7 @@ const App: React.FC = () => {
         <Route path='/userprofile' element={<UserProfilePage />}/>
         <Route path='/therapist-profile' element={<TherapistProfile />}/>
         <Route path='/therapist-messages' element={<MessagesSection />}/>
+        <Route path='/patients' element={<Patients />}/>
       </Routes>
     </BrowserRouter>
   );
