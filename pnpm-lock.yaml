@@ -84,6 +84,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
+      axios:
+        specifier: ^1.7.9
+        version: 1.7.9
       esbuild:
         specifier: ^0.25.0
         version: 0.25.0
