@@ -41,7 +41,7 @@ export function UserDashboard() {
     { text: "Profile", icon: <PersonIcon />, route: "/userprofile" },
     { text: "Bookings", icon: <BookOnlineIcon />, route: "/user-bookings" },
     { text: "Therapists", icon: <PsychologyIcon />, route: "/therapists" },
-    { text: "Ask AI", icon: <HelpIcon />, route: "/ask-ai" },
+    { text: "Ask AI", icon: <HelpIcon />, route: "/user-ask-ai" },
     { text: "Payments", icon: <PaymentIcon />, route: "/payments" },
     { text: "Settings", icon: <SettingsIcon />, route: "/settings" },
   ];

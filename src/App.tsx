@@ -25,6 +25,7 @@ import TherapistPayments from './components/therapist/TherapistPayments';
 import Appointments from './components/therapist/Appointments';
 //UserDashboard
 import UserBookings from './components/UserDash/UserBooking';
+import UserAskAI from './components/UserDash/UserAskAI';
 
 //AdminDashboard
 import AdminUserManagement from './components/AdminDash/AdminUserManagement';
@@ -88,6 +89,7 @@ const App: React.FC = () => {
         <Route path='/appointments' element={<Appointments />}/>
         //UserDashboard
         <Route path='/user-bookings' element={<UserBookings/>}/>
+        <Route path='/user-ask-ai' element={<UserAskAI/>}/>
 
 
         //AdminDashboard

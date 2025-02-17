@@ -60,7 +60,7 @@ const AskAI: React.FC = () => {
                     borderRadius: "50px",
                     "&:hover": { backgroundColor: "#5A8F3E" },
                   }}
-                  onClick={() => navigate("/ask-ai")}
+                  onClick={() => navigate("/")}
                 >
                   Start Chatting
                 </Button>
