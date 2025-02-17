@@ -28,6 +28,7 @@ const Navbar = () => {
     { label: 'Therapist', path: '/specialists' },
     { label: 'About', path: '/aboutus' },
     { label: 'Ask AI', path: '/ask-ai' },
+    { label: 'Login', path: '/login' }
   ];
 
   return (
