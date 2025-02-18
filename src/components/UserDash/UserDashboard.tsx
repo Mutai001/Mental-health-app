@@ -19,6 +19,11 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import UserOverview from "./UserOverview";
+import UserAskAI from "./UserAskAI";
+import UserBookings from "./UserBooking";
+import UserProfilePage from "./UserProfile";
+
+
 
 const menuItems = [
   { text: "Profile", icon: <PersonIcon />, route: "profile" },
@@ -92,6 +97,10 @@ export function UserDashboard() {
       {/* Main Content Area */}
       <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
         {activeComponent === "overview" && <UserOverview />}
+        {activeComponent === "ask-ai" && <UserAskAI />}
+        {activeComponent === "bookings" && <UserBookings />}
+        {activeComponent === "profile" && <UserProfilePage />}
+
         {/* Future imports for Profile, Bookings, etc. can be placed here */}
       </Box>
     </Box>
