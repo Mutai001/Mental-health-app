@@ -22,6 +22,7 @@ import UserOverview from "./UserOverview";
 import UserAskAI from "./UserAskAI";
 import UserBookings from "./UserBooking";
 import UserProfilePage from "./UserProfile";
+import UserTherapists from "./UserTherapist";
 
 
 
@@ -100,6 +101,7 @@ export function UserDashboard() {
         {activeComponent === "ask-ai" && <UserAskAI />}
         {activeComponent === "bookings" && <UserBookings />}
         {activeComponent === "profile" && <UserProfilePage />}
+        {activeComponent === "therapists" && <UserTherapists />}
 
         {/* Future imports for Profile, Bookings, etc. can be placed here */}
       </Box>
