@@ -1,8 +1,5 @@
 import {
   Avatar,
-  Card,
-  CardContent,
-  Typography,
   Box,
   Drawer,
   List,
@@ -11,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -21,14 +18,20 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
+import UserOverview from "./UserOverview";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5 } },
-};
+const menuItems = [
+  { text: "Profile", icon: <PersonIcon />, route: "profile" },
+  { text: "Bookings", icon: <BookOnlineIcon />, route: "bookings" },
+  { text: "Therapists", icon: <PsychologyIcon />, route: "therapists" },
+  { text: "Ask AI", icon: <HelpIcon />, route: "ask-ai" },
+  { text: "Payments", icon: <PaymentIcon />, route: "payments" },
+  { text: "Settings", icon: <SettingsIcon />, route: "settings" },
+];
 
 export function UserDashboard() {
   const navigate = useNavigate();
+  const [activeComponent, setActiveComponent] = useState("overview");
 
   const handleLogout = () => {
     setTimeout(() => {
@@ -36,15 +39,6 @@ export function UserDashboard() {
       navigate("/login");
     }, 1500);
   };
-
-  const menuItems = [
-    { text: "Profile", icon: <PersonIcon />, route: "/userprofile" },
-    { text: "Bookings", icon: <BookOnlineIcon />, route: "/user-bookings" },
-    { text: "Therapists", icon: <PsychologyIcon />, route: "/therapists" },
-    { text: "Ask AI", icon: <HelpIcon />, route: "/user-ask-ai" },
-    { text: "Payments", icon: <PaymentIcon />, route: "/payments" },
-    { text: "Settings", icon: <SettingsIcon />, route: "/settings" },
-  ];
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#2C423F" }}>
@@ -66,12 +60,19 @@ export function UserDashboard() {
           <Avatar sx={{ bgcolor: "#6DA14E", width: 60, height: 60, mx: "auto" }}>
             <DashboardIcon />
           </Avatar>
-          <Typography variant="h6" sx={{ mt: 1 }}>Dashboard</Typography>
         </Box>
         <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => setActiveComponent("overview")}>
+              <ListItemIcon sx={{ color: "white" }}>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
+          </ListItem>
           {menuItems.map(({ text, icon, route }) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => navigate(route)}>
+              <ListItemButton onClick={() => setActiveComponent(route)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -88,29 +89,10 @@ export function UserDashboard() {
         </List>
       </Drawer>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-          <Card
-            sx={{
-              maxWidth: 500,
-              p: 3,
-              textAlign: "center",
-              boxShadow: 5,
-              borderRadius: 3,
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
-                Welcome to Your Dashboard
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Manage your profile, bookings, therapists, and more.
-              </Typography>
-            </CardContent>
-          </Card>
-        </motion.div>
+        {activeComponent === "overview" && <UserOverview />}
+        {/* Future imports for Profile, Bookings, etc. can be placed here */}
       </Box>
     </Box>
   );
