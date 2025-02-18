@@ -24,6 +24,7 @@ import UserBookings from "./UserBooking";
 import UserProfilePage from "./UserProfile";
 import UserTherapists from "./UserTherapist";
 import UserPayments from "./UserPayments";
+import UserSettings from "./UserSettings"
 
 
 
@@ -104,6 +105,7 @@ export function UserDashboard() {
         {activeComponent === "profile" && <UserProfilePage />}
         {activeComponent === "therapists" && <UserTherapists />}
         {activeComponent === "payments" && <UserPayments/>}
+        {activeComponent === "settings" && <UserSettings/>}
 
         {/* Future imports for Profile, Bookings, etc. can be placed here */}
       </Box>
