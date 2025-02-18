@@ -7,6 +7,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Snackbar,
+  IconButton,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,15 +22,15 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
+import MenuIcon from "@mui/icons-material/Menu";
+import MuiAlert from "@mui/material/Alert";
 import UserOverview from "./UserOverview";
 import UserAskAI from "./UserAskAI";
 import UserBookings from "./UserBooking";
 import UserProfilePage from "./UserProfile";
 import UserTherapists from "./UserTherapist";
 import UserPayments from "./UserPayments";
-import UserSettings from "./UserSettings"
-
-
+import UserSettings from "./UserSettings";
 
 const menuItems = [
   { text: "Profile", icon: <PersonIcon />, route: "profile" },
@@ -40,27 +44,38 @@ const menuItems = [
 export function UserDashboard() {
   const navigate = useNavigate();
   const [activeComponent, setActiveComponent] = useState("overview");
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [logoutToast, setLogoutToast] = useState(false);
 
   const handleLogout = () => {
+    setLogoutToast(true);
     setTimeout(() => {
-      alert("Logged out successfully!");
       navigate("/login");
-    }, 1500);
+    }, 2000);
   };
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#2C423F" }}>
+      {/* AppBar for Mobile Menu */}
+      <AppBar position="fixed" sx={{ backgroundColor: "#1F302B", display: { sm: "none" } }}>
+        <Toolbar>
+          <IconButton onClick={() => setOpenDrawer(true)} sx={{ color: "white" }}>
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      
       {/* Sidebar Navigation */}
       <Drawer
-        variant="permanent"
+        variant={openDrawer ? "temporary" : "permanent"}
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
         sx={{
-          width: 250,
-          flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: 250,
-            boxSizing: "border-box",
             backgroundColor: "#1F302B",
             color: "white",
+            boxSizing: "border-box",
           },
         }}
       >
@@ -98,17 +113,27 @@ export function UserDashboard() {
       </Drawer>
 
       {/* Main Content Area */}
-      <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Box sx={{ flexGrow: 1, p: 3, display: "flex", justifyContent: "center", alignItems: "center", mt: { xs: 6, sm: 0 } }}>
         {activeComponent === "overview" && <UserOverview />}
         {activeComponent === "ask-ai" && <UserAskAI />}
         {activeComponent === "bookings" && <UserBookings />}
         {activeComponent === "profile" && <UserProfilePage />}
         {activeComponent === "therapists" && <UserTherapists />}
-        {activeComponent === "payments" && <UserPayments/>}
-        {activeComponent === "settings" && <UserSettings/>}
-
-        {/* Future imports for Profile, Bookings, etc. can be placed here */}
+        {activeComponent === "payments" && <UserPayments />}
+        {activeComponent === "settings" && <UserSettings />}
       </Box>
+
+      {/* Logout Snackbar */}
+      <Snackbar
+        open={logoutToast}
+        autoHideDuration={2000}
+        onClose={() => setLogoutToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MuiAlert severity="success" elevation={6} variant="filled" onClose={() => setLogoutToast(false)}>
+          Logged out successfully!
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }
