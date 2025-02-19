@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Drawer, List, ListItemText, ListItemButton } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { AppBar, Toolbar, IconButton, Typography, Box } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography, Box, CssBaseline } from "@mui/material";
 
 const UserDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -11,7 +11,8 @@ const UserDashboard = () => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <CssBaseline />
       <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
@@ -20,20 +21,27 @@ const UserDashboard = () => {
           <Typography variant="h6">User Dashboard</Typography>
         </Toolbar>
       </AppBar>
-      <Drawer open={open} onClose={toggleDrawer}>
+      
+      {/* Responsive Drawer */}
+      <Drawer 
+        anchor="left" 
+        open={open} 
+        onClose={toggleDrawer} 
+        sx={{
+          "& .MuiDrawer-paper": { width: { xs: "75%", sm: "250px" } }
+        }}
+      >
         <List>
-          <ListItemButton component="a" href="#">
-            <ListItemText primary="Home" />
-          </ListItemButton>
-          <ListItemButton component="a" href="#">
-            <ListItemText primary="Profile" />
-          </ListItemButton>
-          <ListItemButton component="a" href="#">
-            <ListItemText primary="Settings" />
-          </ListItemButton>
+          {["Home", "Profile", "Settings"].map((text) => (
+            <ListItemButton key={text} component="a" href="#">
+              <ListItemText primary={text} />
+            </ListItemButton>
+          ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+
+      {/* Main Content */}
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, width: "100%" }}>
         <Typography variant="h4">Welcome to Your Dashboard</Typography>
       </Box>
     </Box>

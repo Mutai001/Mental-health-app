@@ -7,10 +7,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Snackbar,
   IconButton,
   AppBar,
   Toolbar,
+  Snackbar,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MuiAlert from "@mui/material/Alert";
 import UserOverview from "./UserOverview";
 import UserAskAI from "./UserAskAI";
@@ -44,7 +45,7 @@ const menuItems = [
 export function UserDashboard() {
   const navigate = useNavigate();
   const [activeComponent, setActiveComponent] = useState("overview");
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [logoutToast, setLogoutToast] = useState(false);
 
   const handleLogout = () => {
@@ -56,48 +57,42 @@ export function UserDashboard() {
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#2C423F" }}>
-      {/* AppBar for Mobile Menu */}
+      {/* AppBar for Mobile */}
       <AppBar position="fixed" sx={{ backgroundColor: "#1F302B", display: { sm: "none" } }}>
         <Toolbar>
-          <IconButton onClick={() => setOpenDrawer(true)} sx={{ color: "white" }}>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
             <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      
+
       {/* Sidebar Navigation */}
       <Drawer
-        variant={openDrawer ? "temporary" : "permanent"}
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
+        variant="permanent"
         sx={{
           "& .MuiDrawer-paper": {
-            width: 250,
+            width: sidebarOpen ? 250 : 70,
+            transition: "width 0.3s",
             backgroundColor: "#1F302B",
             color: "white",
-            boxSizing: "border-box",
+            overflowX: "hidden",
           },
         }}
       >
-        <Box sx={{ textAlign: "center", p: 2 }}>
-          <Avatar sx={{ bgcolor: "#6DA14E", width: 60, height: 60, mx: "auto" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
+          <Avatar sx={{ bgcolor: "#6DA14E", width: 50, height: 50 }}>
             <DashboardIcon />
           </Avatar>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
+            {sidebarOpen ? <ChevronLeftIcon /> : <MenuIcon />}
+          </IconButton>
         </Box>
         <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => setActiveComponent("overview")}>
-              <ListItemIcon sx={{ color: "white" }}>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-          </ListItem>
           {menuItems.map(({ text, icon, route }) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => setActiveComponent(route)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
+                {sidebarOpen && <ListItemText primary={text} />}
               </ListItemButton>
             </ListItem>
           ))}
@@ -106,14 +101,23 @@ export function UserDashboard() {
               <ListItemIcon sx={{ color: "red" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              {sidebarOpen && <ListItemText primary="Logout" />}
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
 
       {/* Main Content Area */}
-      <Box sx={{ flexGrow: 1, p: 3, display: "flex", justifyContent: "center", alignItems: "center", mt: { xs: 6, sm: 0 } }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          transition: "margin-left 0.3s",
+          ml: sidebarOpen ? "250px" : "70px",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         {activeComponent === "overview" && <UserOverview />}
         {activeComponent === "ask-ai" && <UserAskAI />}
         {activeComponent === "bookings" && <UserBookings />}
