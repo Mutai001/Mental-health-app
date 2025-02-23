@@ -1,11 +1,21 @@
-import { useState } from "react";
-import { Avatar, Button, TextField, Card, CardContent, CircularProgress, Typography, Box } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  CircularProgress,
+  Typography,
+  Box,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useLoginUserMutation } from "../../redux/loginApi";
+import { toast } from "react-toastify";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -26,23 +36,43 @@ export function LoginPage() {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [loading, setLoading] = useState(false);
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true);
     try {
-      console.log("User logged in:", data);
-      alert("Login successful!");
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+      await loginUser(data).unwrap();
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      navigate("/dashboard"); // Redirect after login
+    } catch {
+      toast.error("Login failed. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#2C423F" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "#2C423F",
+      }}
+    >
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <Card
           sx={{
@@ -55,11 +85,22 @@ export function LoginPage() {
           }}
         >
           <CardContent>
-            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}
+            >
               Login
             </Typography>
             <motion.div whileHover={{ scale: 1.1 }}>
-              <Avatar sx={{ width: 60, height: 60, margin: "auto", mb: 2, bgcolor: "#6DA14E" }}>
+              <Avatar
+                sx={{
+                  width: 60,
+                  height: 60,
+                  margin: "auto",
+                  mb: 2,
+                  bgcolor: "#6DA14E",
+                }}
+              >
                 <LockOpenIcon />
               </Avatar>
             </motion.div>
@@ -89,7 +130,7 @@ export function LoginPage() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={loading}
+                  disabled={isLoading}
                   sx={{
                     backgroundColor: "#2C423F",
                     color: "#fff",
@@ -98,12 +139,27 @@ export function LoginPage() {
                     ":hover": { backgroundColor: "#1F302B" },
                   }}
                 >
-                  {loading ? <CircularProgress size={20} color="inherit" /> : "Login"}
+                  {isLoading ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    >
+                      <CircularProgress size={20} color="inherit" />
+                    </motion.div>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
               </motion.div>
             </form>
             <Typography variant="body2" sx={{ textAlign: "center", mt: 2 }}>
-              Don't have an account? <Link to="/register" style={{ color: "#6DA14E", textDecoration: "none" }}>Register</Link>
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                style={{ color: "#6DA14E", textDecoration: "none" }}
+              >
+                Register
+              </Link>
             </Typography>
           </CardContent>
         </Card>
