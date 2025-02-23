@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -10,24 +9,26 @@ import {
   Box,
 } from "@mui/material";
 import { z } from "zod";
-import { useForm, FieldError } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
+import { useRegisterUserMutation } from "../../redux/registerApi";
 
-// Fade-in animation for the card
 const fadeIn = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.5 } },
 };
 
-// Zod schema for form validation
 const schema = z
   .object({
-    fullName: z.string().min(3, "Full name must be at least 3 characters"),
+    full_name: z.string().min(3, "Full name must be at least 3 characters"),
     email: z.string().email("Invalid email address"),
+    contact_phone: z.string().min(10, "Invalid phone number"),
+    address: z.string().min(3, "Address is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
   })
@@ -46,18 +47,29 @@ export function RegistrationPage() {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [loading, setLoading] = useState(false);
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true);
     try {
-      console.log("User registered:", data);
-      alert("Registration successful!");
-    } catch (error) {
-      console.error("Registration failed:", error);
-      alert("Registration failed. Please try again.");
-    } finally {
-      setLoading(false);
+      toast.loading("Registering user...", { id: "register" });
+
+      const userData = {
+        full_name: data.full_name,
+        email: data.email,
+        contact_phone: data.contact_phone,
+        address: data.address,
+        password: data.password,
+        role: "user",
+      };
+
+      const response = await registerUser(userData).unwrap();
+      toast.success("Registration successful! Redirecting...", { id: "register" });
+      console.log("User registered:", response);
+
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+      toast.error("Registration failed. Please try again.", { id: "register" });
+      console.error("Registration failed:", err);
     }
   };
 
@@ -71,6 +83,7 @@ export function RegistrationPage() {
         backgroundColor: "#2C423F",
       }}
     >
+      <Toaster position="top-right" reverseOrder={false} />
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <Card
           sx={{
@@ -84,106 +97,29 @@ export function RegistrationPage() {
           }}
         >
           <CardContent>
-            {/* Title */}
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}
-            >
+            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
               Register
             </Typography>
-
-            {/* Avatar Icon */}
-            <Avatar
-              sx={{
-                width: 60,
-                height: 60,
-                margin: "auto",
-                mb: 2,
-                bgcolor: "#6DA14E",
-              }}
-            >
+            <Avatar sx={{ width: 60, height: 60, margin: "auto", mb: 2, bgcolor: "#6DA14E" }}>
               <LockOpenIcon />
             </Avatar>
 
-            {/* Registration Form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              {/* Full Name Field */}
-              <TextField
-                fullWidth
-                label="Full Name"
-                variant="outlined"
-                {...register("fullName")}
-                error={!!errors.fullName}
-                helperText={(errors.fullName as FieldError)?.message || ""}
-                sx={{ mb: 2 }}
-              />
+              <TextField fullWidth label="Full Name" {...register("full_name")} error={!!errors.full_name} helperText={errors.full_name?.message} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Email" type="email" {...register("email")} error={!!errors.email} helperText={errors.email?.message} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Phone Number" {...register("contact_phone")} error={!!errors.contact_phone} helperText={errors.contact_phone?.message} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Address" {...register("address")} error={!!errors.address} helperText={errors.address?.message} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Password" type="password" {...register("password")} error={!!errors.password} helperText={errors.password?.message} sx={{ mb: 2 }} />
+              <TextField fullWidth label="Confirm Password" type="password" {...register("confirmPassword")} error={!!errors.confirmPassword} helperText={errors.confirmPassword?.message} sx={{ mb: 2 }} />
 
-              {/* Email Field */}
-              <TextField
-                fullWidth
-                label="Email"
-                variant="outlined"
-                type="email"
-                {...register("email")}
-                error={!!errors.email}
-                helperText={(errors.email as FieldError)?.message || ""}
-                sx={{ mb: 2 }}
-              />
-
-              {/* Password Field */}
-              <TextField
-                fullWidth
-                label="Password"
-                variant="outlined"
-                type="password"
-                {...register("password")}
-                error={!!errors.password}
-                helperText={(errors.password as FieldError)?.message || ""}
-                sx={{ mb: 2 }}
-              />
-
-              {/* Confirm Password Field */}
-              <TextField
-                fullWidth
-                label="Confirm Password"
-                variant="outlined"
-                type="password"
-                {...register("confirmPassword")}
-                error={!!errors.confirmPassword}
-                helperText={(errors.confirmPassword as FieldError)?.message || ""}
-                sx={{ mb: 2 }}
-              />
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={loading}
-                sx={{
-                  backgroundColor: "#2C423F",
-                  color: "#fff",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  ":hover": { backgroundColor: "#1F302B" },
-                }}
-              >
-                {loading ? <CircularProgress size={20} color="inherit" /> : "Register"}
+              <Button type="submit" fullWidth variant="contained" disabled={isLoading} sx={{ backgroundColor: "#2C423F", color: "#fff", textTransform: "none", fontWeight: "bold", ":hover": { backgroundColor: "#1F302B" } }}>
+                {isLoading ? <CircularProgress size={20} color="inherit" /> : "Register"}
               </Button>
             </form>
 
-            {/* Login Link */}
             <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
               Already have an account?
-              <Button
-                onClick={() => navigate("/login")}
-                startIcon={<LoginIcon />}
-                sx={{
-                  color: "#2C423F",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                }}
-              >
+              <Button onClick={() => navigate("/login")} startIcon={<LoginIcon />} sx={{ color: "#2C423F", textTransform: "none", fontWeight: "bold" }}>
                 Click here to login
               </Button>
             </Typography>
