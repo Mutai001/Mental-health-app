@@ -39,6 +39,7 @@ const UserPayments = () => {
     try {
       await makePayment({ amount, method: paymentMethod }).unwrap();
       alert("Payment successful!");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       alert("Payment failed!");
     }
