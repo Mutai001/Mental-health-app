@@ -30,7 +30,7 @@ import UserAskAI from "./UserAskAI";
 import UserBookings from "./UserBookings/UserBooking";
 import UserProfilePage from "./UserProfile";
 import UserTherapists from "./UserTherapist";
-import UserPayments from "./UserPayments";
+import UserPayments from "./UserPayments/UserPayments";
 import UserSettings from "./UserSettings";
 
 const menuItems = [
