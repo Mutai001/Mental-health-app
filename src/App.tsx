@@ -13,10 +13,10 @@ import LoginPage from './features/Auth/LoginPage';
 import AboutUs from './components/pages/landingpage/AboutUs';
 import AskAI from './components/pages/landingpage/AskAI';
 import ContactUs from './components/pages/landingpage/ContactUs';
-import UserDashboard from './components/UserDash/UserDashboard';
+import UserDashboard from './features/UserDash/UserDashboard';
 import AdminDashboard from './components/AdminDash/AdminDashboard';
 import TherapistDashboard from './components/therapist/TherapistDashboard';
-import UserProfilePage from './components/UserDash/UserProfile';
+import UserProfilePage from './features/UserDash/UserProfile';
 import TherapistProfile from './components/therapist/TherapistProfile';
 import MessagesSection from './components/therapist/TherapistMessages';
 import Patients from './components/therapist/Patients';
@@ -24,8 +24,8 @@ import TherapistSettings from './components/therapist/TherapistSettings';
 import TherapistPayments from './components/therapist/TherapistPayments';
 import Appointments from './components/therapist/Appointments';
 //UserDashboard
-import UserBookings from './components/UserDash/UserBooking';
-import UserAskAI from './components/UserDash/UserAskAI';
+import UserBookings from './features/UserDash/UserBookings/UserBooking';
+import UserAskAI from './features/UserDash/UserAskAI';
 
 //AdminDashboard
 import AdminUserManagement from './components/AdminDash/AdminUserManagement';

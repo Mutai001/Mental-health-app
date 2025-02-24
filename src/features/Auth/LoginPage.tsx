@@ -24,6 +24,11 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+type LoginResponse = {
+  token: string;
+  role: "admin" | "user" | "therapist";
+};
+
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -41,25 +46,16 @@ export function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await loginUser(data).unwrap();
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      navigate("/dashboard"); // Redirect after login
+      const response: LoginResponse = await loginUser(data).unwrap();
+      toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+
+      // Store token (optional, if using authentication storage)
+      localStorage.setItem("token", response.token);
+      
+      // Redirect based on role
+      navigate(`/${response.role}`);
     } catch {
-      toast.error("Login failed. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error("Login failed. Please try again.", { position: "top-right", autoClose: 3000 });
     }
   };
 
@@ -75,32 +71,12 @@ export function LoginPage() {
     >
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <Card
-          sx={{
-            maxWidth: 500,
-            p: 3,
-            textAlign: "center",
-            boxShadow: 5,
-            borderRadius: 3,
-            backgroundColor: "#FFFFFF",
-          }}
+          sx={{ maxWidth: 500, p: 3, textAlign: "center", boxShadow: 5, borderRadius: 3, backgroundColor: "#FFFFFF" }}
         >
           <CardContent>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}
-            >
-              Login
-            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>Login</Typography>
             <motion.div whileHover={{ scale: 1.1 }}>
-              <Avatar
-                sx={{
-                  width: 60,
-                  height: 60,
-                  margin: "auto",
-                  mb: 2,
-                  bgcolor: "#6DA14E",
-                }}
-              >
+              <Avatar sx={{ width: 60, height: 60, margin: "auto", mb: 2, bgcolor: "#6DA14E" }}>
                 <LockOpenIcon />
               </Avatar>
             </motion.div>
@@ -131,19 +107,10 @@ export function LoginPage() {
                   fullWidth
                   variant="contained"
                   disabled={isLoading}
-                  sx={{
-                    backgroundColor: "#2C423F",
-                    color: "#fff",
-                    textTransform: "none",
-                    fontWeight: "bold",
-                    ":hover": { backgroundColor: "#1F302B" },
-                  }}
+                  sx={{ backgroundColor: "#2C423F", color: "#fff", textTransform: "none", fontWeight: "bold", ":hover": { backgroundColor: "#1F302B" } }}
                 >
                   {isLoading ? (
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
                       <CircularProgress size={20} color="inherit" />
                     </motion.div>
                   ) : (
@@ -153,13 +120,7 @@ export function LoginPage() {
               </motion.div>
             </form>
             <Typography variant="body2" sx={{ textAlign: "center", mt: 2 }}>
-              Don't have an account?{" "}
-              <Link
-                to="/register"
-                style={{ color: "#6DA14E", textDecoration: "none" }}
-              >
-                Register
-              </Link>
+              Don't have an account? <Link to="/register" style={{ color: "#6DA14E", textDecoration: "none" }}>Register</Link>
             </Typography>
           </CardContent>
         </Card>

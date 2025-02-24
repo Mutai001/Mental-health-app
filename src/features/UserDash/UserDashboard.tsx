@@ -27,7 +27,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MuiAlert from "@mui/material/Alert";
 import UserOverview from "./UserOverview";
 import UserAskAI from "./UserAskAI";
-import UserBookings from "./UserBooking";
+import UserBookings from "./UserBookings/UserBooking";
 import UserProfilePage from "./UserProfile";
 import UserTherapists from "./UserTherapist";
 import UserPayments from "./UserPayments";
