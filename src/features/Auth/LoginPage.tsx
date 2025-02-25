@@ -15,24 +15,15 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLoginUserMutation } from "../../redux/loginApi";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 
+// Validation schema
 const schema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 type FormData = z.infer<typeof schema>;
-
-type LoginResponse = {
-  token: string;
-  role: "admin" | "user" | "therapist";
-};
-
-const fadeIn = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-};
 
 export function LoginPage() {
   const {
@@ -46,16 +37,48 @@ export function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response: LoginResponse = await loginUser(data).unwrap();
-      toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+      console.log("Submitting data:", data); // Debugging
 
-      // Store token (optional, if using authentication storage)
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      const response = await loginUser(formData).unwrap();
+      console.log("API Response:", response); // Debugging
+
+      if (!response || !response.token || !response.role) {
+        throw new Error("Invalid response from server. Missing token or role.");
+      }
+
+      toast.success("🎉 Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        transition: Slide,
+        theme: "colored",
+      });
+
+      // Store token
       localStorage.setItem("token", response.token);
-      
+
       // Redirect based on role
       navigate(`/${response.role}`);
-    } catch {
-      toast.error("Login failed. Please try again.", { position: "top-right", autoClose: 3000 });
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+
+      let errorMessage = "Login failed. Please try again.";
+      if (typeof error === "object" && error !== null && "data" in error && typeof (error as { data: { message: string } }).data === "object" && "message" in (error as { data: { message: string } }).data) {
+        if (error && typeof error === "object" && "data" in error && typeof (error as { data: { message: string } }).data === "object") {
+          errorMessage = (error as { data: { message: string } }).data.message; // API error message
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message; // JavaScript error
+      }
+
+      toast.error(`❌ ${errorMessage}`, {
+        position: "top-right",
+        autoClose: 3000,
+        transition: Slide,
+        theme: "colored",
+      });
     }
   };
 
@@ -69,12 +92,12 @@ export function LoginPage() {
         backgroundColor: "#2C423F",
       }}
     >
-      <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-        <Card
-          sx={{ maxWidth: 500, p: 3, textAlign: "center", boxShadow: 5, borderRadius: 3, backgroundColor: "#FFFFFF" }}
-        >
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}>
+        <Card sx={{ maxWidth: 500, p: 3, textAlign: "center", boxShadow: 5, borderRadius: 3, backgroundColor: "#FFFFFF" }}>
           <CardContent>
-            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>Login</Typography>
+            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
+              Login
+            </Typography>
             <motion.div whileHover={{ scale: 1.1 }}>
               <Avatar sx={{ width: 60, height: 60, margin: "auto", mb: 2, bgcolor: "#6DA14E" }}>
                 <LockOpenIcon />
@@ -107,20 +130,23 @@ export function LoginPage() {
                   fullWidth
                   variant="contained"
                   disabled={isLoading}
-                  sx={{ backgroundColor: "#2C423F", color: "#fff", textTransform: "none", fontWeight: "bold", ":hover": { backgroundColor: "#1F302B" } }}
+                  sx={{
+                    backgroundColor: "#2C423F",
+                    color: "#fff",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    ":hover": { backgroundColor: "#1F302B" },
+                  }}
                 >
-                  {isLoading ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
-                      <CircularProgress size={20} color="inherit" />
-                    </motion.div>
-                  ) : (
-                    "Login"
-                  )}
+                  {isLoading ? <CircularProgress size={20} color="inherit" /> : "Login"}
                 </Button>
               </motion.div>
             </form>
             <Typography variant="body2" sx={{ textAlign: "center", mt: 2 }}>
-              Don't have an account? <Link to="/register" style={{ color: "#6DA14E", textDecoration: "none" }}>Register</Link>
+              Don't have an account?{" "}
+              <Link to="/register" style={{ color: "#6DA14E", textDecoration: "none" }}>
+                Register
+              </Link>
             </Typography>
           </CardContent>
         </Card>
