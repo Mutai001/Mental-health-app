@@ -25,17 +25,23 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MuiAlert from "@mui/material/Alert";
 
+import AdminUserManagement from "./AdminUserManagement";
+import Reports from "./Reports";
+import Appointments from "./Appointments";
+import Payments from "./Payments";
+import Settings from "./Settings";
+
 const adminMenuItems = [
-  { text: "User Management", icon: <PeopleIcon />, route: "user-management" },
-  { text: "Reports", icon: <BarChartIcon />, route: "reports" },
-  { text: "Appointments", icon: <CalendarTodayIcon />, route: "appointments" },
-  { text: "Payments", icon: <PaymentIcon />, route: "payments" },
-  { text: "Settings", icon: <SettingsIcon />, route: "settings" },
+  { text: "User Management", icon: <PeopleIcon />, component: <AdminUserManagement /> },
+  { text: "Reports", icon: <BarChartIcon />, component: <Reports /> },
+  { text: "Appointments", icon: <CalendarTodayIcon />, component: <Appointments /> },
+  { text: "Payments", icon: <PaymentIcon />, component: <Payments /> },
+  { text: "Settings", icon: <SettingsIcon />, component: <Settings /> },
 ];
 
 export function AdminDashboard() {
   const navigate = useNavigate();
-  const [activeComponent, setActiveComponent] = useState("overview");
+  const [activeComponent, setActiveComponent] = useState(<AdminUserManagement />);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [logoutToast, setLogoutToast] = useState(false);
 
@@ -79,9 +85,9 @@ export function AdminDashboard() {
           </IconButton>
         </Box>
         <List>
-          {adminMenuItems.map(({ text, icon, route }) => (
+          {adminMenuItems.map(({ text, icon, component }) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => setActiveComponent(route)}>
+              <ListItemButton onClick={() => setActiveComponent(component)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
                 {sidebarOpen && <ListItemText primary={text} />}
               </ListItemButton>
@@ -109,7 +115,7 @@ export function AdminDashboard() {
           height: "100%",
         }}
       >
-        <h2 style={{ color: "white" }}>Admin Dashboard - {activeComponent}</h2>
+        {activeComponent}
       </Box>
 
       {/* Logout Snackbar */}
