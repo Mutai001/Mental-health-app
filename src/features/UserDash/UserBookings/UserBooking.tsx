@@ -16,8 +16,8 @@ import {
 import { motion } from "framer-motion";
 
 const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
 interface Booking {
@@ -47,18 +47,18 @@ const UserBookings = () => {
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3, display: "flex", justifyContent: "center" }}>
+    <Box sx={{ flexGrow: 1, p: 2, display: "flex", justifyContent: "center" }}>
       <motion.div initial="hidden" animate="visible" variants={fadeIn}>
         <Card
           sx={{
-            maxWidth: 700,
+            maxWidth: 600,
             mx: "auto",
-            mt: 5,
-            p: 3,
+            mt: 4,
+            p: 2,
             textAlign: "center",
-            boxShadow: 5,
-            borderRadius: 3,
-            backgroundColor: "#FFFFFF",
+            boxShadow: 4,
+            borderRadius: 2,
+            backgroundColor: "#F5F5F5",
           }}
         >
           <CardContent>
@@ -81,7 +81,7 @@ const UserBookings = () => {
                 <TableBody>
                   {bookings.length > 0 ? (
                     bookings.map((booking) => (
-                      <motion.tr key={booking.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                      <motion.tr key={booking.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
                         <TableRow>
                           <TableCell>{booking.therapist_name}</TableCell>
                           <TableCell>{booking.date}</TableCell>
