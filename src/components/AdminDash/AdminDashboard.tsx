@@ -1,8 +1,5 @@
 import {
   Avatar,
-  Card,
-  CardContent,
-  Typography,
   Box,
   Drawer,
   List,
@@ -10,68 +7,83 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  IconButton,
+  AppBar,
+  Toolbar,
+  Snackbar,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
-import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import MuiAlert from "@mui/material/Alert";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5 } },
-};
+const adminMenuItems = [
+  { text: "User Management", icon: <PeopleIcon />, route: "user-management" },
+  { text: "Reports", icon: <BarChartIcon />, route: "reports" },
+  { text: "Appointments", icon: <CalendarTodayIcon />, route: "appointments" },
+  { text: "Payments", icon: <PaymentIcon />, route: "payments" },
+  { text: "Settings", icon: <SettingsIcon />, route: "settings" },
+];
 
 export function AdminDashboard() {
   const navigate = useNavigate();
+  const [activeComponent, setActiveComponent] = useState("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [logoutToast, setLogoutToast] = useState(false);
 
   const handleLogout = () => {
+    setLogoutToast(true);
     setTimeout(() => {
-      alert("Logged out successfully!");
       navigate("/login");
-    }, 1500);
+    }, 2000);
   };
-
-  const adminMenuItems = [
-    { text: "User Management", icon: <PeopleIcon />, route: "/admin-user-management" },
-    { text: "Reports", icon: <BarChartIcon />, route: "/admin/reports" },
-    { text: "Appointments", icon: <CalendarTodayIcon />, route: "/admin/appointments" },
-    { text: "Payments", icon: <PaymentIcon />, route: "/admin/payments" },
-    { text: "Settings", icon: <SettingsIcon />, route: "/admin/settings" },
-  ];
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#2C423F" }}>
+      {/* AppBar for Mobile */}
+      <AppBar position="fixed" sx={{ backgroundColor: "#1F302B", display: { sm: "none" } }}>
+        <Toolbar>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
       {/* Sidebar Navigation */}
       <Drawer
         variant="permanent"
         sx={{
-          width: 250,
-          flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: 250,
-            boxSizing: "border-box",
+            width: sidebarOpen ? 250 : 70,
+            transition: "width 0.3s",
             backgroundColor: "#1F302B",
             color: "white",
+            overflowX: "hidden",
           },
         }}
       >
-        <Box sx={{ textAlign: "center", p: 2 }}>
-          <Avatar sx={{ bgcolor: "#6DA14E", width: 60, height: 60, mx: "auto" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
+          <Avatar sx={{ bgcolor: "#6DA14E", width: 50, height: 50 }}>
             <DashboardIcon />
           </Avatar>
-          <Typography variant="h6" sx={{ mt: 1 }}>Admin Panel</Typography>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
+            {sidebarOpen ? <ChevronLeftIcon /> : <MenuIcon />}
+          </IconButton>
         </Box>
         <List>
           {adminMenuItems.map(({ text, icon, route }) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => navigate(route)}>
+              <ListItemButton onClick={() => setActiveComponent(route)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
+                {sidebarOpen && <ListItemText primary={text} />}
               </ListItemButton>
             </ListItem>
           ))}
@@ -80,36 +92,37 @@ export function AdminDashboard() {
               <ListItemIcon sx={{ color: "red" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              {sidebarOpen && <ListItemText primary="Logout" />}
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
 
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-          <Card
-            sx={{
-              maxWidth: 500,
-              p: 3,
-              textAlign: "center",
-              boxShadow: 5,
-              borderRadius: 3,
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
-                Welcome to Admin Dashboard
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Manage users, reports, appointments, and payments efficiently.
-              </Typography>
-            </CardContent>
-          </Card>
-        </motion.div>
+      {/* Main Content Area */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          transition: "margin-left 0.3s",
+          ml: sidebarOpen ? "250px" : "70px",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <h2 style={{ color: "white" }}>Admin Dashboard - {activeComponent}</h2>
       </Box>
+
+      {/* Logout Snackbar */}
+      <Snackbar
+        open={logoutToast}
+        autoHideDuration={2000}
+        onClose={() => setLogoutToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MuiAlert severity="success" elevation={6} variant="filled" onClose={() => setLogoutToast(false)}>
+          Logged out successfully!
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }
