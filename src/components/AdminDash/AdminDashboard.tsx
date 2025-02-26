@@ -29,14 +29,14 @@ import AdminUserManagement from "./AdminUserManagement";
 import AdminReports from "./AdminReports";
 import AdminAppointments from "./AdminAppointments";
 import AdminPayments from "./Payments";
-import Settings from "./Settings";
+import AdminSettings from "./AdminSettings";
 
 const adminMenuItems = [
   { text: "User Management", icon: <PeopleIcon />, component: <AdminUserManagement /> },
   { text: "Reports", icon: <BarChartIcon />, component: <AdminReports /> },
   { text: "Appointments", icon: <CalendarTodayIcon />, component: <AdminAppointments /> },
   { text: "Payments", icon: <PaymentIcon />, component: <AdminPayments /> },
-  { text: "Settings", icon: <SettingsIcon />, component: <Settings /> },
+  { text: "Settings", icon: <SettingsIcon />, component: <AdminSettings /> },
 ];
 
 export function AdminDashboard() {
