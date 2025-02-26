@@ -15,9 +15,9 @@ const fadeIn = {
 };
 
 const stats = [
-  { title: "Active Bookings", count: 120, icon: <BookOnlineIcon />, color: "#6DA14E" },
-  { title: "Payment History", count: 50, icon: <PaymentIcon />, color: "#1F302B" },
-  { title: "Therapists Available", count: 25, icon: <PsychologyIcon />, color: "#6DA14E" },
+  { title: "Active Bookings", count: 120, icon: <BookOnlineIcon />, color: "#4CAF50" },
+  { title: "Payment History", count: 50, icon: <PaymentIcon />, color: "#2196F3" },
+  { title: "Therapists Available", count: 25, icon: <PsychologyIcon />, color: "#FF9800" },
 ];
 
 const doughnutData = {
@@ -26,21 +26,21 @@ const doughnutData = {
     {
       label: "Count",
       data: [120, 50, 25],
-      backgroundColor: ["#6DA14E", "#1F302B", "#6DA14E"],
-      borderColor: ["#6DA14E", "#1F302B", "#6DA14E"],
+      backgroundColor: ["#4CAF50", "#2196F3", "#FF9800"],
+      borderColor: ["#4CAF50", "#2196F3", "#FF9800"],
       borderWidth: 1,
     },
   ],
 };
 
 const barData = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
   datasets: [
     {
       label: "Bookings",
       data: [65, 59, 80, 81, 56, 55, 40],
-      backgroundColor: "#6DA14E",
-      borderColor: "#6DA14E",
+      backgroundColor: "#4CAF50",
+      borderColor: "#4CAF50",
       borderWidth: 1,
     },
   ],
@@ -49,33 +49,33 @@ const barData = {
 function UserOverview() {
   return (
     <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-      <Box sx={{ p: 4, maxWidth: 1200, mx: "auto" }}>
-        <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 3, textAlign: "center" }}>
+      <Box sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
+        <Typography variant="h5" sx={{ color: "#333", mb: 2, textAlign: "center", fontWeight: "bold" }}>
           User Dashboard
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {stats.map(({ title, count, icon, color }) => (
-            <Grid item xs={12} sm={6} md={4} key={title}>
+            <Grid item xs={12} sm={4} key={title}>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Card sx={{ backgroundColor: color, color: "white", borderRadius: 3, boxShadow: 5 }}>
+                <Card sx={{ backgroundColor: color, color: "white", borderRadius: 2, boxShadow: 3 }}>
                   <CardContent sx={{ textAlign: "center" }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2, fontSize: 40 }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 1, fontSize: 30 }}>
                       {icon}
                     </Box>
-                    <Typography variant="h6">{title}</Typography>
-                    <Typography variant="h4" sx={{ fontWeight: "bold" }}>{count}</Typography>
+                    <Typography variant="body1" fontWeight="bold">{title}</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: "bold" }}>{count}</Typography>
                   </CardContent>
                 </Card>
               </motion.div>
             </Grid>
           ))}
         </Grid>
-        <Grid container spacing={3} sx={{ mt: 2 }}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} md={6}>
             <motion.div whileHover={{ scale: 1.02 }}>
-              <Card sx={{ backgroundColor: "#1F302B", color: "white", borderRadius: 3, boxShadow: 5 }}>
+              <Card sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, boxShadow: 3 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+                  <Typography variant="h6" sx={{ mb: 2, textAlign: "center", color: "#333" }}>
                     Bookings Overview
                   </Typography>
                   <Doughnut data={doughnutData} />
@@ -85,9 +85,9 @@ function UserOverview() {
           </Grid>
           <Grid item xs={12} md={6}>
             <motion.div whileHover={{ scale: 1.02 }}>
-              <Card sx={{ backgroundColor: "#1F302B", color: "white", borderRadius: 3, boxShadow: 5 }}>
+              <Card sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, boxShadow: 3 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+                  <Typography variant="h6" sx={{ mb: 2, textAlign: "center", color: "#333" }}>
                     Monthly Bookings
                   </Typography>
                   <Bar data={barData} />
