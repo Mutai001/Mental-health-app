@@ -1,4 +1,12 @@
-import { Card, CardContent, Typography, Grid, Box, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Button,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 
@@ -13,27 +21,65 @@ const therapists = [
   { name: "Dr. Mark Wilson", specialization: "Psychodynamic Therapy", availability: "Busy" },
 ];
 
-function UserTherapist() {
+const UserTherapist = () => {
+  const [availableTherapists, setAvailableTherapists] = useState(therapists);
+
+  useEffect(() => {
+    // Simulated API call (replace with actual fetch if needed)
+    setTimeout(() => setAvailableTherapists(therapists), 500);
+  }, []);
+
   return (
     <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-      <Box sx={{ p: 4, maxWidth: 1000, mx: "auto" }}>
-        <Typography variant="h4" sx={{ color: "#FFFFFF", mb: 3, textAlign: "center" }}>
+      <Box sx={{ p: 4, maxWidth: 1000, mx: "auto", backgroundColor: "#F5F5F5", borderRadius: 3, boxShadow: 3 }}>
+        <Typography
+          variant="h4"
+          sx={{ color: "#2C423F", mb: 3, textAlign: "center", fontWeight: "bold", textTransform: "uppercase" }}
+        >
           Available Therapists
         </Typography>
         <Grid container spacing={3}>
-          {therapists.map(({ name, specialization, availability }) => (
+          {availableTherapists.map(({ name, specialization, availability }) => (
             <Grid item xs={12} sm={6} md={4} key={name}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Card sx={{ backgroundColor: "#6DA14E", color: "white", borderRadius: 3, boxShadow: 5 }}>
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <Card
+                  sx={{
+                    backgroundColor: availability === "Available" ? "#4CAF50" : "#D32F2F",
+                    color: "white",
+                    borderRadius: 3,
+                    boxShadow: 5,
+                    transition: "all 0.3s ease-in-out",
+                  }}
+                >
                   <CardContent sx={{ textAlign: "center" }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2, fontSize: 40 }}>
-                      <PsychologyIcon fontSize="large" />
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
+                      <PsychologyIcon fontSize="large" sx={{ fontSize: 50 }} />
                     </Box>
-                    <Typography variant="h6">{name}</Typography>
-                    <Typography variant="body1">{specialization}</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: "bold", mt: 1 }}>{availability}</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>{name}</Typography>
+                    <Typography variant="body1" sx={{ fontStyle: "italic", mb: 1 }}>{specialization}</Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: "bold",
+                        mt: 1,
+                        color: availability === "Available" ? "#FFD700" : "#FFEB3B",
+                        fontSize: "1rem",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {availability}
+                    </Typography>
                     {availability === "Available" && (
-                      <Button variant="contained" sx={{ mt: 2, backgroundColor: "#1F302B" }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          mt: 2,
+                          backgroundColor: "#1F302B",
+                          "&:hover": { backgroundColor: "#163022" },
+                          padding: "8px 16px",
+                          borderRadius: "8px",
+                        }}
+                      >
                         Book Now
                       </Button>
                     )}
@@ -46,6 +92,6 @@ function UserTherapist() {
       </Box>
     </motion.div>
   );
-}
+};
 
 export default UserTherapist;
