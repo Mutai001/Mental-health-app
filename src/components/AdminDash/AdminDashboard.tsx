@@ -26,15 +26,15 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MuiAlert from "@mui/material/Alert";
 
 import AdminUserManagement from "./AdminUserManagement";
-import Reports from "./Reports";
-import Appointments from "./Appointments";
+import AdminReports from "./AdminReports";
+import AdminAppointments from "./AdminAppointments";
 import Payments from "./Payments";
 import Settings from "./Settings";
 
 const adminMenuItems = [
   { text: "User Management", icon: <PeopleIcon />, component: <AdminUserManagement /> },
-  { text: "Reports", icon: <BarChartIcon />, component: <Reports /> },
-  { text: "Appointments", icon: <CalendarTodayIcon />, component: <Appointments /> },
+  { text: "Reports", icon: <BarChartIcon />, component: <AdminReports /> },
+  { text: "Appointments", icon: <CalendarTodayIcon />, component: <AdminAppointments /> },
   { text: "Payments", icon: <PaymentIcon />, component: <Payments /> },
   { text: "Settings", icon: <SettingsIcon />, component: <Settings /> },
 ];
