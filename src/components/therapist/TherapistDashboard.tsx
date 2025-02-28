@@ -1,8 +1,5 @@
-import { useState } from "react";
 import {
-  Card,
-  CardContent,
-  Typography,
+  Avatar,
   Box,
   Drawer,
   List,
@@ -11,10 +8,14 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  AppBar,
+  Toolbar,
+  Snackbar,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -22,64 +23,73 @@ import MessageIcon from "@mui/icons-material/Message";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import PaymentIcon from "@mui/icons-material/Payment";
 import SettingsIcon from "@mui/icons-material/Settings";
+import MuiAlert from "@mui/material/Alert";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5 } },
-};
+import TherapistProfile from "./TherapistProfile";
+import TherapistAppointments from "./Appointments";
+import TherapistMessages from "./TherapistMessages";
+import TherapistPatients from "./Patients";
+import TherapistPayments from "./TherapistPayments";
+import TherapistSettings from "./TherapistSettings";
+
+const therapistMenuItems = [
+  { text: "Profile", icon: <PersonIcon />, component: <TherapistProfile /> },
+  { text: "Appointments", icon: <CalendarMonthIcon />, component: <TherapistAppointments /> },
+  { text: "Messages", icon: <MessageIcon />, component: <TherapistMessages /> },
+  { text: "Patients", icon: <PsychologyIcon />, component: <TherapistPatients /> },
+  { text: "Payments", icon: <PaymentIcon />, component: <TherapistPayments /> },
+  { text: "Settings", icon: <SettingsIcon />, component: <TherapistSettings /> },
+];
 
 export function TherapistDashboard() {
   const navigate = useNavigate();
-  const [, setLoading] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [activeComponent, setActiveComponent] = useState(<TherapistProfile />);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [logoutToast, setLogoutToast] = useState(false);
 
   const handleLogout = () => {
-    setLoading(true);
+    setLogoutToast(true);
     setTimeout(() => {
-      alert("Logged out successfully!");
       navigate("/login");
-      setLoading(false);
-    }, 1500);
+    }, 2000);
   };
-
-  const menuItems = [
-    { text: "Profile", icon: <PersonIcon />, route: "/therapist-profile" },
-    { text: "Appointments", icon: <CalendarMonthIcon />, route: "/appointments" },
-    { text: "Messages", icon: <MessageIcon />, route: "/therapist-messages" },
-    { text: "Patients", icon: <PsychologyIcon />, route: "/patients" },
-    { text: "Payments", icon: <PaymentIcon />, route: "/therapist-payments" },
-    { text: "Settings", icon: <SettingsIcon />, route: "/therapist-settings" },
-  ];
 
   return (
     <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#2C423F" }}>
-      {/* Sidebar Navigation */}
+      <AppBar position="fixed" sx={{ backgroundColor: "#1F302B", display: { sm: "none" } }}>
+        <Toolbar>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
       <Drawer
         variant="permanent"
         sx={{
-          width: open ? 250 : 80,
-          flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: open ? 250 : 80,
-            boxSizing: "border-box",
+            width: sidebarOpen ? 250 : 70,
+            transition: "width 0.3s",
             backgroundColor: "#1F302B",
             color: "white",
-            transition: "width 0.3s ease-in-out",
+            overflowX: "hidden",
           },
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
-          {open && <Typography variant="h6">Therapist Dashboard</Typography>}
-          <IconButton onClick={() => setOpen(!open)} sx={{ color: "white" }}>
-            <MenuIcon />
+          <Avatar sx={{ bgcolor: "#6DA14E", width: 50, height: 50 }}>
+            <PersonIcon />
+          </Avatar>
+          <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ color: "white" }}>
+            {sidebarOpen ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
         </Box>
         <List>
-          {menuItems.map(({ text, icon, route }) => (
+          {therapistMenuItems.map(({ text, icon, component }) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => navigate(route)}>
+              <ListItemButton onClick={() => setActiveComponent(component)}>
                 <ListItemIcon sx={{ color: "white" }}>{icon}</ListItemIcon>
-                {open && <ListItemText primary={text} />}
+                {sidebarOpen && <ListItemText primary={text} />}
               </ListItemButton>
             </ListItem>
           ))}
@@ -88,36 +98,35 @@ export function TherapistDashboard() {
               <ListItemIcon sx={{ color: "red" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              {open && <ListItemText primary="Logout" />}
+              {sidebarOpen && <ListItemText primary="Logout" />}
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
 
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-          <Card
-            sx={{
-              maxWidth: 500,
-              p: 3,
-              textAlign: "center",
-              boxShadow: 5,
-              borderRadius: 3,
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" sx={{ fontWeight: "bold", color: "#2C423F", mb: 2 }}>
-                Welcome to Your Therapist Dashboard
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Manage your profile, appointments, messages, and clients.
-              </Typography>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          transition: "margin-left 0.3s",
+          ml: sidebarOpen ? "250px" : "70px",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        {activeComponent}
       </Box>
+
+      <Snackbar
+        open={logoutToast}
+        autoHideDuration={2000}
+        onClose={() => setLogoutToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MuiAlert severity="success" elevation={6} variant="filled" onClose={() => setLogoutToast(false)}>
+          Logged out successfully!
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }
