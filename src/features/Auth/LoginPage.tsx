@@ -23,7 +23,10 @@ const schema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type FormData = z.infer<typeof schema>;
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function LoginPage() {
   const {
@@ -37,18 +40,30 @@ export function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      console.log("Submitting data:", data); // Debugging
-
-      const formData = new FormData();
-      formData.append("email", data.email);
-      formData.append("password", data.password);
-      const response = await loginUser(formData).unwrap();
-      console.log("API Response:", response); // Debugging
-
+      // Log what we're about to send
+      console.log("Attempting login with:", {
+        email: data.email,
+        password: "***REDACTED***" // For security, don't log actual password
+      });
+      
+      // Send the data directly as a plain object
+      const response = await loginUser({
+        email: data.email,
+        password: data.password
+      }).unwrap();
+      
+      console.log("Login successful:", response);
+      
+      // Validate response
       if (!response || !response.token || !response.role) {
         throw new Error("Invalid response from server. Missing token or role.");
       }
-
+      
+      // Store token in localStorage
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("userRole", response.role);
+      
+      // Success message
       toast.success("🎉 Login successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -56,24 +71,80 @@ export function LoginPage() {
         theme: "colored",
       });
 
-      // Store token
-      localStorage.setItem("token", response.token);
-
       // Redirect based on role
-      navigate(`/${response.role}`);
+      switch (response.role) {
+        case "user":
+          navigate("/user");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        case "therapist":
+          navigate("/therapist");
+          break;
+        default:
+          console.error("Unknown role:", response.role);
+          navigate("/");
+      }
     } catch (error: unknown) {
       console.error("Login error:", error);
 
-      let errorMessage = "Login failed. Please try again.";
-      if (typeof error === "object" && error !== null && "data" in error && typeof (error as { data: { message: string } }).data === "object" && "message" in (error as { data: { message: string } }).data) {
-        if (error && typeof error === "object" && "data" in error && typeof (error as { data: { message: string } }).data === "object") {
-          errorMessage = (error as { data: { message: string } }).data.message; // API error message
+      // Handle ZodError specifically
+      if (error && typeof error === "object" && "data" in error) {
+        const errorData = error.data as { name?: string; issues?: { path: string[]; message: string }[]; status?: number; error?: string; message?: string };
+        
+        if (errorData?.name === "ZodError" && Array.isArray(errorData?.issues)) {
+          // Extract all error messages
+          const zodErrorMessages = errorData.issues.map((issue: { path: string[]; message: string }) => {
+            return `${issue.path.join('.')}: ${issue.message}`;
+          }).join(', ');
+          
+          toast.error(`❌ Validation error: ${zodErrorMessages}`, {
+            position: "top-right",
+            autoClose: 5000,
+            transition: Slide,
+            theme: "colored",
+          });
+          return;
         }
-      } else if (error instanceof Error) {
-        errorMessage = error.message; // JavaScript error
+        
+        // Handle 401 Unauthorized specifically
+        if ("status" in error && error.status === 401) {
+          const errorMessage = errorData?.error || "Invalid email or password";
+          
+          toast.error(`❌ ${errorMessage}`, {
+            position: "top-right",
+            autoClose: 3000,
+            transition: Slide,
+            theme: "colored",
+          });
+          return;
+        }
+        
+        // Check for error message in various formats
+        if (errorData?.error) {
+          toast.error(`❌ ${errorData.error}`, {
+            position: "top-right",
+            autoClose: 3000,
+            transition: Slide,
+            theme: "colored",
+          });
+          return;
+        }
+        
+        if (errorData?.message) {
+          toast.error(`❌ ${errorData.message}`, {
+            position: "top-right",
+            autoClose: 3000,
+            transition: Slide,
+            theme: "colored",
+          });
+          return;
+        }
       }
-
-      toast.error(`❌ ${errorMessage}`, {
+      
+      // Default error message
+      toast.error(`❌ Login failed. Please try again.`, {
         position: "top-right",
         autoClose: 3000,
         transition: Slide,

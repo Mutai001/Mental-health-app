@@ -14,21 +14,21 @@ import AboutUs from './components/pages/landingpage/AboutUs';
 import AskAI from './components/pages/landingpage/AskAI';
 import ContactUs from './components/pages/landingpage/ContactUs';
 import UserDashboard from './features/UserDash/UserDashboard';
-import AdminDashboard from './components/AdminDash/AdminDashboard';
-import TherapistDashboard from './components/therapist/TherapistDashboard';
+import AdminDashboard from './features/AdminDash/AdminDashboard';
+import TherapistDashboard from './features/therapist/TherapistDashboard';
 import UserProfilePage from './features/UserDash/UserProfile';
-import TherapistProfile from './components/therapist/TherapistProfile';
-import MessagesSection from './components/therapist/TherapistMessages';
-import Patients from './components/therapist/Patients';
-import TherapistSettings from './components/therapist/TherapistSettings';
-import TherapistPayments from './components/therapist/TherapistPayments';
-import Appointments from './components/therapist/Appointments';
+import TherapistProfile from './features/therapist/TherapistProfile';
+import MessagesSection from './features/therapist/TherapistMessages';
+import Patients from './features/therapist/Patients';
+import TherapistSettings from './features/therapist/TherapistSettings';
+import TherapistPayments from './features/therapist/TherapistPayments';
+import Appointments from './features/therapist/Appointments';
 //UserDashboard
 import UserBookings from './features/UserDash/UserBookings/UserBooking';
 import UserAskAI from './features/UserDash/UserAskAI';
 
 //AdminDashboard
-import AdminUserManagement from './components/AdminDash/AdminUserManagement';
+import AdminUserManagement from './features/AdminDash/AdminUserManagement';
 
 const App: React.FC = () => {
   return (

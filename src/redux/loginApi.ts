@@ -1,29 +1,28 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+// Define the expected response type
 interface LoginResponse {
   token: string;
-  role: "admin" | "user" | "therapist"; // Ensuring expected role values
+  role: "admin" | "user" | "therapist";
 }
 
-// export const loginApi = createApi({
-//   reducerPath: "loginApi",
-//   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }),
-//   endpoints: (builder) => ({
-//     loginUser: builder.mutation<LoginResponse, { email: string; password: string }>({
-//       query: (credentials) => ({
-//         url: "/login",
-//         method: "POST",
-//         body: credentials,
-//       }),
-//     }),
-//   }),
-// });
+// Define login request type
+interface LoginRequest {
+  email: string;
+  password: string;
+}
 
 export const loginApi = createApi({
   reducerPath: "loginApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: "http://localhost:8000/api",
+    prepareHeaders: (headers) => {
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<LoginResponse, FormData>({
+    loginUser: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
         url: "/login",
         method: "POST",
