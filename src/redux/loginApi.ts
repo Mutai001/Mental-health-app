@@ -13,6 +13,7 @@ export interface LoginState {
   token: string | null;
   isLoading: boolean;
   error: string | null;
+  isAuthenticated: boolean; // Add this to track authentication status
 }
 
 export interface LoginCredentials {
@@ -65,6 +66,7 @@ const initialState: LoginState = {
   token: localStorage.getItem('token'),
   isLoading: false,
   error: null,
+  isAuthenticated: !!localStorage.getItem('token'), // Set based on token presence
 };
 
 // Auth slice
@@ -77,6 +79,7 @@ export const authSlice = createSlice({
       state.token = null;
       state.isLoading = false;
       state.error = null;
+      state.isAuthenticated = false; // Reset authentication status
     },
   },
   extraReducers: (builder) => {
@@ -89,10 +92,12 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.isAuthenticated = true; // Set authentication status to true
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+        state.isAuthenticated = false; // Set authentication status to false
       });
   },
 });

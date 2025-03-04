@@ -1,96 +1,115 @@
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Button,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography, Grid, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import { useAppSelector } from "../../redux/store"; // Adjust the path as needed
+import { toast } from "react-toastify";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const therapists = [
-  { name: "Dr. John Doe", specialization: "Cognitive Therapy", availability: "Available" },
-  { name: "Dr. Jane Smith", specialization: "Behavioral Therapy", availability: "Available" },
-  { name: "Dr. Mark Wilson", specialization: "Psychodynamic Therapy", availability: "Busy" },
-];
-
 const UserTherapist = () => {
-  const [availableTherapists, setAvailableTherapists] = useState(therapists);
+  const [availableTherapists, setAvailableTherapists] = useState([]);
+  const { isAuthenticated, user, token } = useAppSelector((state) => state.auth); // Get authentication state
 
   useEffect(() => {
-    // Simulated API call (replace with actual fetch if needed)
-    setTimeout(() => setAvailableTherapists(therapists), 500);
-  }, []);
+    // Fetch therapists from the API
+    const fetchTherapists = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/therapists", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request headers
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch therapists");
+        }
+
+        const data = await response.json();
+        setAvailableTherapists(data);
+      } catch (error) {
+        toast.error("Failed to fetch therapists. Please try again later.");
+        console.error(error);
+      }
+    };
+
+    if (token) {
+      fetchTherapists(); // Fetch therapists only if the token is available
+    }
+  }, [token]); // Re-fetch therapists if the token changes
+
+  const handleBookTherapist = async (therapistId: string) => {
+    if (!isAuthenticated) {
+      toast.error("You must be logged in to book a therapist.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/book-therapist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Use the token from Redux store
+        },
+        body: JSON.stringify({ therapistId, userId: user?.id }), // Use the user ID from Redux store
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to book therapist");
+      }
+
+      const result = await response.json();
+      toast.success("Therapist booked successfully!");
+      console.log(result);
+    } catch (error) {
+      toast.error("Failed to book therapist. Please try again.");
+      console.error(error);
+    }
+  };
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-      <Box sx={{ p: 4, maxWidth: 1000, mx: "auto", backgroundColor: "#F5F5F5", borderRadius: 3, boxShadow: 3 }}>
-        <Typography
-          variant="h4"
-          sx={{ color: "#2C423F", mb: 3, textAlign: "center", fontWeight: "bold", textTransform: "uppercase" }}
-        >
-          Available Therapists
-        </Typography>
-        <Grid container spacing={3}>
-          {availableTherapists.map(({ name, specialization, availability }) => (
-            <Grid item xs={12} sm={6} md={4} key={name}>
-              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                <Card
-                  sx={{
-                    backgroundColor: availability === "Available" ? "#4CAF50" : "#D32F2F",
-                    color: "white",
-                    borderRadius: 3,
-                    boxShadow: 5,
-                    transition: "all 0.3s ease-in-out",
-                  }}
-                >
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
-                      <PsychologyIcon fontSize="large" sx={{ fontSize: 50 }} />
-                    </Box>
-                    <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>{name}</Typography>
-                    <Typography variant="body1" sx={{ fontStyle: "italic", mb: 1 }}>{specialization}</Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: "bold",
-                        mt: 1,
-                        color: availability === "Available" ? "#FFD700" : "#FFEB3B",
-                        fontSize: "1rem",
-                        letterSpacing: "0.5px",
-                      }}
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold" }}>
+        Available Therapists
+      </Typography>
+      <Grid container spacing={3}>
+        {availableTherapists.map(({ id, name, specialization, availability }) => (
+          <Grid item xs={12} sm={6} md={4} key={id}>
+            <motion.div variants={fadeIn} initial="hidden" animate="visible">
+              <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <PsychologyIcon sx={{ fontSize: 40, mb: 2 }} />
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    {name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    {specialization}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: availability === "Available" ? "green" : "red" }}
+                  >
+                    {availability}
+                  </Typography>
+                  {availability === "Available" && (
+                    <Button
+                      variant="contained"
+                      sx={{ mt: 2 }}
+                      onClick={() => handleBookTherapist(id)}
                     >
-                      {availability}
-                    </Typography>
-                    {availability === "Available" && (
-                      <Button
-                        variant="contained"
-                        sx={{
-                          mt: 2,
-                          backgroundColor: "#1F302B",
-                          "&:hover": { backgroundColor: "#163022" },
-                          padding: "8px 16px",
-                          borderRadius: "8px",
-                        }}
-                      >
-                        Book Now
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </motion.div>
+                      Book Now
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 
