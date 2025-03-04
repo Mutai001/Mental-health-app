@@ -1,24 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { loginApi } from "./loginApi"; // Fixed import path
-import { userApi } from "./registerApi";
-import { userBookingsApi } from "../features/UserDash/UserBookings/userBookingsApi";
-import { userPaymentsApi } from "../features/UserDash/UserPayments/userPaymentsApi";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import authReducer from './loginApi';
 
 export const store = configureStore({
   reducer: {
-    [loginApi.reducerPath]: loginApi.reducer,
-    [userApi.reducerPath]: userApi.reducer,
-    [userBookingsApi.reducerPath]: userBookingsApi.reducer,
-    [userPaymentsApi.reducerPath]: userPaymentsApi.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      loginApi.middleware,
-      userApi.middleware,
-      userBookingsApi.middleware,
-      userPaymentsApi.middleware
-    ),
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable serializable check for async thunks
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// Custom hooks for typed useDispatch and useSelector
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
