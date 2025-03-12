@@ -17,11 +17,11 @@ export const userPaymentsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }),
   endpoints: (builder) => ({
     getUserPayments: builder.query<Payment[], void>({
-      query: () => "/payments",
+      query: () => "/mpesa/transactions",
     }),
     makePayment: builder.mutation<{ message: string }, PaymentRequest>({
       query: (paymentData) => ({
-        url: "/payments/pay",
+        url: "/mpesa/initiate",
         method: "POST",
         body: paymentData,
       }),

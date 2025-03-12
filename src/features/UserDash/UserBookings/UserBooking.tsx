@@ -14,6 +14,7 @@ import {
   Chip,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import axiosInstance from "../../../components/utils/axiosInstance";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 10 },
@@ -40,10 +41,16 @@ const UserBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/user-bookings")
-      .then((res) => res.json())
-      .then((data) => setBookings(data))
-      .catch((err) => console.error("Error fetching bookings:", err));
+    const fetchBookings = async () => {
+      try {
+        const response = await axiosInstance.get("/bookings");
+        setBookings(response.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
   }, []);
 
   return (
