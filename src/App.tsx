@@ -80,20 +80,24 @@ const App: React.FC = () => {
         <Route path='/user' element={<UserDashboard />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path='/therapist' element={<TherapistDashboard />} />
-        <Route path='/userprofile' element={<UserProfilePage />}/>
-        <Route path='/therapist-profile' element={<TherapistProfile />}/>
-        <Route path='/therapist-messages' element={<MessagesSection />}/>
-        <Route path='/patients' element={<Patients />}/>
-        <Route path='/therapist-settings' element={<TherapistSettings />}/>
-        <Route path='/therapist-payments' element={<TherapistPayments />}/>
-        <Route path='/appointments' element={<Appointments />}/>
+
+        //TherapistDashboard
+        <Route path='/therapist/therapist-profile' element={<TherapistProfile />}/>
+        <Route path='/therapist/therapist-messages' element={<MessagesSection />}/>
+        <Route path='/therapist/patients' element={<Patients />}/>
+        <Route path='/therapist/therapist-settings' element={<TherapistSettings />}/>
+        <Route path='/therapist/therapist-payments' element={<TherapistPayments />}/>
+        <Route path='/therapist/appointments' element={<Appointments />}/>
+
         //UserDashboard
-        <Route path='/user-bookings' element={<UserBookings/>}/>
-        <Route path='/user-ask-ai' element={<UserAskAI/>}/>
+        <Route path='/user/user-bookings' element={<UserBookings/>}/>
+        <Route path='/user/user-ask-ai' element={<UserAskAI/>}/>
+        <Route path='/user/userprofile' element={<UserProfilePage />}/>
+
 
 
         //AdminDashboard
-        <Route path='/admin-user-management' element={<AdminUserManagement/>}/> 
+        <Route path='/admin/admin-user-management' element={<AdminUserManagement/>}/> 
       </Routes>
     </BrowserRouter>
   );

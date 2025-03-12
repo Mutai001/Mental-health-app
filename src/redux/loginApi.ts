@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../components/utils/axiosInstance';
 
 // Define types
 export interface User {
@@ -13,7 +13,7 @@ export interface LoginState {
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  isAuthenticated: boolean; // Add this to track authentication status
+  isAuthenticated: boolean;
 }
 
 export interface LoginCredentials {
@@ -26,12 +26,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/login', credentials, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      const response = await axiosInstance.post('/login', credentials);
       const { token, user } = response.data;
 
       // Store token and user info in localStorage
@@ -40,25 +35,22 @@ export const loginUser = createAsyncThunk(
 
       return { token, user };
     } catch (error: unknown) {
-      // Handle different error scenarios
-      const errorMessage = axios.isAxiosError(error) && error.response?.data?.message ? error.response.data.message : 'Login failed';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Login failed';
       return rejectWithValue(errorMessage);
     }
   }
 );
 
 // Logout action
-export const logoutUser = createAsyncThunk(
-  'auth/logoutUser',
-  async (_, { dispatch }) => {
-    // Clear localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    
-    // Reset state
-    dispatch(authSlice.actions.resetState());
-  }
-);
+export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispatch }) => {
+  // Clear localStorage
+  localStorage.removeItem('token');
+  localStorage.removeItem('userRole');
+  
+  // Reset state
+  dispatch(authSlice.actions.resetState());
+});
 
 // Initial state
 const initialState: LoginState = {
@@ -66,7 +58,7 @@ const initialState: LoginState = {
   token: localStorage.getItem('token'),
   isLoading: false,
   error: null,
-  isAuthenticated: !!localStorage.getItem('token'), // Set based on token presence
+  isAuthenticated: !!localStorage.getItem('token'),
 };
 
 // Auth slice
@@ -79,7 +71,7 @@ export const authSlice = createSlice({
       state.token = null;
       state.isLoading = false;
       state.error = null;
-      state.isAuthenticated = false; // Reset authentication status
+      state.isAuthenticated = false;
     },
   },
   extraReducers: (builder) => {
@@ -92,12 +84,12 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.isAuthenticated = true; // Set authentication status to true
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-        state.isAuthenticated = false; // Set authentication status to false
+        state.isAuthenticated = false;
       });
   },
 });
