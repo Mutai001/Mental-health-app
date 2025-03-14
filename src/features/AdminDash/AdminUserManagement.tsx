@@ -1,139 +1,136 @@
-import { useState } from "react";
-import {
-    Box,
-    Card,
-    CardContent,
-    Typography,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    IconButton,
-    Tooltip,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    TextField,
-    CircularProgress
-} from "@mui/material";
-import { motion } from "framer-motion";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
-import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Box, Card, CardContent, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, CircularProgress, Snackbar, Alert } from "@mui/material";
+import PeopleIcon from "@mui/icons-material/People";
 
-const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
-};
+const API_URL = "http://localhost:8000/api/users";
 
-const AdminUserManagement = () => {
-    interface User {
-        id: number;
-        name: string;
-        email: string;
-        role: string;
+export function AdminUserManagement() {
+  interface User {
+    id: string | number;
+    full_name: string;
+    email: string;
+    role: string;
+  }
+  
+  const [users, setUsers] = useState<User[]>([]);
+  const [newUser, setNewUser] = useState({ full_name: "", email: "", role: "User" });
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" | "warning" | "info" }>({ open: false, message: "", severity: "success" });
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(API_URL);
+      setUsers(response.data);
+    } catch {
+      setError("Error fetching users");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const [users, setUsers] = useState<User[]>([]);
-    const [loading] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [editUser, setEditUser] = useState<User | null>(null);
-    const [newUser, setNewUser] = useState<User>({ id: 0, name: "", email: "", role: "" });
+  const handleCreateUser = async () => {
+    if (!newUser.full_name || !newUser.email) return;
+    try {
+      await axios.post(API_URL, newUser);
+      setNewUser({ full_name: "", email: "", role: "User" });
+      fetchUsers();
+      setSnackbar({ open: true, message: "User created successfully", severity: "success" });
+    } catch {
+      setSnackbar({ open: true, message: "Error creating user", severity: "error" });
+    }
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewUser((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleUpdateUser = async (id: string | number) => {
+    try {
+      await axios.put(`${API_URL}/${id}`, editingUser);
+      setEditingUser(null);
+      fetchUsers();
+      setSnackbar({ open: true, message: "User updated successfully", severity: "success" });
+    } catch {
+      setSnackbar({ open: true, message: "Error updating user", severity: "error" });
+    }
+  };
 
-    const handleSubmit = () => {
-        toast.success("User saved successfully!");
-        setOpenDialog(false);
-    };
+  const handleDeleteUser = async (id: string | number) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchUsers();
+      setSnackbar({ open: true, message: "User deleted successfully", severity: "success" });
+    } catch {
+      setSnackbar({ open: true, message: "Error deleting user", severity: "error" });
+    }
+  };
 
-    const handleDelete = (id: number) => {
-        toast.error("User deleted!");
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-    };
+  return (
+    <Box sx={{ p: 3, color: "white" }}>
+      <Typography variant="h4" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <PeopleIcon /> User Management
+      </Typography>
+      
+      <Card sx={{ backgroundColor: "#1F302B", mb: 3, p: 2 }}>
+        <CardContent>
+          <Typography variant="h6" sx={{ mb: 1 }}>Add New User</Typography>
+          <TextField fullWidth label="Full Name" value={newUser.full_name} onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })} sx={{ mb: 1, backgroundColor: "white", borderRadius: 1 }} />
+          <TextField fullWidth label="Email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} sx={{ mb: 1, backgroundColor: "white", borderRadius: 1 }} />
+          <TextField select fullWidth label="Role" value={newUser.role} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })} sx={{ backgroundColor: "white", borderRadius: 1 }}>
+            {['User', 'Admin'].map((role) => (
+              <MenuItem key={role} value={role}>{role}</MenuItem>
+            ))}
+          </TextField>
+          <Button onClick={handleCreateUser} sx={{ mt: 2, color: "white", backgroundColor: "#6DA14E" }} disabled={!newUser.full_name || !newUser.email}>Add User</Button>
+        </CardContent>
+      </Card>
 
-    return (
-        <Box sx={{ flexGrow: 1, p: 3 }}>
-            <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-                <Card sx={{ p: 3, boxShadow: 5, borderRadius: 3 }}>
-                    <CardContent>
-                        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "green" }}>
-                            User Management
-                        </Typography>
+      {loading ? <CircularProgress sx={{ display: "block", mx: "auto" }} /> : null}
+      {error ? <Typography color="error">{error}</Typography> : null}
+      
+      <TableContainer component={Paper} sx={{ backgroundColor: "#2C423F" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ color: "white" }}>Full Name</TableCell>
+              <TableCell sx={{ color: "white" }}>Email</TableCell>
+              <TableCell sx={{ color: "white" }}>Role</TableCell>
+              <TableCell sx={{ color: "white" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell sx={{ color: "white" }}>{editingUser?.id === user.id ? <TextField value={editingUser.full_name} onChange={(e) => setEditingUser({ ...editingUser, full_name: e.target.value })} sx={{ backgroundColor: "white" }} /> : user.full_name}</TableCell>
+                <TableCell sx={{ color: "white" }}>{editingUser?.id === user.id ? <TextField value={editingUser.email} onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })} sx={{ backgroundColor: "white" }} /> : user.email}</TableCell>
+                <TableCell sx={{ color: "white" }}>{editingUser?.id === user.id ? <TextField select value={editingUser.role} onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })} sx={{ backgroundColor: "white" }}>
+                  {['User', 'Admin'].map((role) => (
+                    <MenuItem key={role} value={role}>{role}</MenuItem>
+                  ))}
+                </TextField> : user.role}</TableCell>
+                <TableCell>
+                  {editingUser?.id === user.id ? (
+                    <Button onClick={() => handleUpdateUser(user.id)} sx={{ color: "white", mr: 1 }}>Save</Button>
+                  ) : (
+                    <Button onClick={() => setEditingUser(user)} sx={{ color: "white", mr: 1 }}>Edit</Button>
+                  )}
+                  <Button onClick={() => handleDeleteUser(user.id)} sx={{ color: "red" }}>Delete</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            onClick={() => setOpenDialog(true)}
-                            sx={{ mb: 2, backgroundColor: "green", '&:hover': { backgroundColor: "darkgreen" } }}
-                        >
-                            Add User
-                        </Button>
-
-                        {loading ? (
-                            <CircularProgress color="success" />
-                        ) : (
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Name</TableCell>
-                                            <TableCell>Email</TableCell>
-                                            <TableCell>Role</TableCell>
-                                            <TableCell>Actions</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {users.map((user) => (
-                                            <TableRow key={user.id}>
-                                                <TableCell>{user.name}</TableCell>
-                                                <TableCell>{user.email}</TableCell>
-                                                <TableCell>{user.role}</TableCell>
-                                                <TableCell>
-                                                    <Tooltip title="Edit">
-                                                        <IconButton onClick={() => { setEditUser(user); setOpenDialog(true); }}>
-                                                            <EditIcon color="primary" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title="Delete">
-                                                        <IconButton onClick={() => handleDelete(user.id)}>
-                                                            <DeleteIcon color="error" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        )}
-                    </CardContent>
-                </Card>
-            </motion.div>
-
-            {/* Dialog for Adding/Editing Users */}
-            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                <DialogTitle>{editUser ? "Edit User" : "Add User"}</DialogTitle>
-                <DialogContent>
-                    <TextField fullWidth margin="dense" label="Name" name="name" value={newUser.name} onChange={handleChange} />
-                    <TextField fullWidth margin="dense" label="Email" name="email" value={newUser.email} onChange={handleChange} />
-                    <TextField fullWidth margin="dense" label="Role" name="role" value={newUser.role} onChange={handleChange} />
-                </DialogContent>
-                <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-                <Button variant="contained" onClick={handleSubmit} sx={{ backgroundColor: "green" }}>
-                    {editUser ? "Update" : "Create"}
-                </Button>
-            </Dialog>
-        </Box>
-    );
-};
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>{snackbar.message}</Alert>
+      </Snackbar>
+    </Box>
+  );
+}
 
 export default AdminUserManagement;
