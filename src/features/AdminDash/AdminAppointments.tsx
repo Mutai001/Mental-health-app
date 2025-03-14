@@ -1,18 +1,54 @@
-import { useState } from "react";
-import { Box, Card, CardContent, Typography, TextField, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Box, Card, CardContent, Typography, TextField, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
-const appointments = [
-  { id: 1, user: "John Doe", date: "2024-07-28", time: "10:00 AM", status: "Confirmed" },
-  { id: 2, user: "Jane Smith", date: "2024-07-29", time: "2:00 PM", status: "Pending" },
-  { id: 3, user: "Mark Lee", date: "2024-07-30", time: "4:00 PM", status: "Canceled" },
-];
+const API_URL = "http://localhost:8000/api/bookings";
 
 export function AdminAppointments() {
+  interface Appointment {
+    id: number;
+    user_id: string;
+    session_date: string;
+    booking_status: string;
+  }
+  
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filter, setFilter] = useState("All");
 
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      setAppointments(response.data);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
+
+  const handleStatusChange = async (id: number, newStatus: string) => {
+    try {
+      await axios.put(`${API_URL}/${id}`, { booking_status: newStatus });
+      fetchAppointments();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchAppointments();
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
+  };
+
   const filteredAppointments =
-    filter === "All" ? appointments : appointments.filter((appt) => appt.status === filter);
+    filter === "All" ? appointments : appointments.filter((appt) => appt.booking_status === filter);
 
   return (
     <Box sx={{ p: 3, color: "white" }}>
@@ -45,17 +81,29 @@ export function AdminAppointments() {
             <TableRow>
               <TableCell sx={{ color: "white" }}>User</TableCell>
               <TableCell sx={{ color: "white" }}>Date</TableCell>
-              <TableCell sx={{ color: "white" }}>Time</TableCell>
               <TableCell sx={{ color: "white" }}>Status</TableCell>
+              <TableCell sx={{ color: "white" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredAppointments.map((appt) => (
               <TableRow key={appt.id}>
-                <TableCell sx={{ color: "white" }}>{appt.user}</TableCell>
-                <TableCell sx={{ color: "white" }}>{appt.date}</TableCell>
-                <TableCell sx={{ color: "white" }}>{appt.time}</TableCell>
-                <TableCell sx={{ color: appt.status === "Canceled" ? "red" : "#6DA14E" }}>{appt.status}</TableCell>
+                <TableCell sx={{ color: "white" }}>{appt.user_id}</TableCell>
+                <TableCell sx={{ color: "white" }}>{appt.session_date}</TableCell>
+                <TableCell sx={{ color: appt.booking_status === "Canceled" ? "red" : "#6DA14E" }}>
+                  {appt.booking_status}
+                </TableCell>
+                <TableCell>
+                  <Button 
+                    onClick={() => handleStatusChange(appt.id, "Confirmed")} 
+                    sx={{ color: "white" }}>Confirm</Button>
+                  <Button 
+                    onClick={() => handleStatusChange(appt.id, "Canceled")} 
+                    sx={{ color: "red" }}>Cancel</Button>
+                  <Button 
+                    onClick={() => handleDelete(appt.id)} 
+                    sx={{ color: "white" }}>Delete</Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

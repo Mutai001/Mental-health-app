@@ -71,21 +71,13 @@ const UserBookings = () => {
     }
   };
 
-  const handleOpen = (booking: Booking | null) => {
+  const handleOpen = (booking: Booking) => {
     setCurrentBooking(booking);
-    if (booking) {
-      setFormData({
-        therapist_id: booking.therapist_id.toString(),
-        session_date: booking.session_date,
-        booking_status: booking.booking_status,
-      });
-    } else {
-      setFormData({
-        therapist_id: "",
-        session_date: "",
-        booking_status: "pending",
-      });
-    }
+    setFormData({
+      therapist_id: booking.therapist_id.toString(),
+      session_date: booking.session_date,
+      booking_status: booking.booking_status,
+    });
     setOpen(true);
   };
 
@@ -103,8 +95,6 @@ const UserBookings = () => {
     try {
       if (currentBooking) {
         await axiosInstance.put(`/bookings/${currentBooking.id}`, formData);
-      } else {
-        await axiosInstance.post("/bookings", formData);
       }
       fetchBookings();
       handleClose();
@@ -145,14 +135,6 @@ const UserBookings = () => {
             >
               Your Bookings
             </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleOpen(null)}
-              sx={{ mb: 2, backgroundColor: "#2C423F", "&:hover": { backgroundColor: "#1E2E2C" } }}
-            >
-              Add New Booking
-            </Button>
             <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
               <Table>
                 <TableHead>
@@ -211,7 +193,7 @@ const UserBookings = () => {
 
       <Dialog open={open} onClose={handleClose} fullScreen={isMobile}>
         <DialogTitle sx={{ backgroundColor: "#2C423F", color: "#fff" }}>
-          {currentBooking ? "Edit Booking" : "Add New Booking"}
+          Edit Booking
         </DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
           <TextField
