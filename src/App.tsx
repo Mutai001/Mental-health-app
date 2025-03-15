@@ -1,3 +1,4 @@
+//App routes, 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/pages/landingpage/Navbar';
 import HeroSection from './components/pages/landingpage/HeroSection';
