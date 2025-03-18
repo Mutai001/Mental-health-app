@@ -47,7 +47,7 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, { dispat
   // Clear localStorage
   localStorage.removeItem('token');
   localStorage.removeItem('userRole');
-  
+
   // Reset state
   dispatch(authSlice.actions.resetState());
 });

@@ -1,13 +1,13 @@
 import React from 'react';
-import { 
-  Avatar, 
-  Button, 
-  TextField, 
-  Card, 
-  CardContent, 
-  CircularProgress, 
-  Typography, 
-  Box 
+import {
+  Avatar,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  CircularProgress,
+  Typography,
+  Box,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,7 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast, Slide } from 'react-toastify';
 
-// Local imports
+// Redux imports
 import { loginUser } from '../../redux/loginApi';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 
@@ -72,8 +72,7 @@ export function LoginPage() {
             navigate('/');
         }
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
       // Handle any errors during login
       toast.error('❌ Login failed. Please try again.', {
         position: 'top-right',
@@ -106,42 +105,42 @@ export function LoginPage() {
         backgroundColor: '#2C423F',
       }}
     >
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }} 
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}
       >
-        <Card 
-          sx={{ 
-            maxWidth: 500, 
-            p: 3, 
-            textAlign: 'center', 
-            boxShadow: 5, 
-            borderRadius: 3, 
-            backgroundColor: '#FFFFFF' 
+        <Card
+          sx={{
+            maxWidth: 500,
+            p: 3,
+            textAlign: 'center',
+            boxShadow: 5,
+            borderRadius: 3,
+            backgroundColor: '#FFFFFF',
           }}
         >
           <CardContent>
-            <Typography 
-              variant="h5" 
+            <Typography
+              variant="h5"
               sx={{ fontWeight: 'bold', color: '#2C423F', mb: 2 }}
             >
               Login
             </Typography>
-            
+
             <motion.div whileHover={{ scale: 1.1 }}>
-              <Avatar 
-                sx={{ 
-                  width: 60, 
-                  height: 60, 
-                  margin: 'auto', 
-                  mb: 2, 
-                  bgcolor: '#6DA14E' 
+              <Avatar
+                sx={{
+                  width: 60,
+                  height: 60,
+                  margin: 'auto',
+                  mb: 2,
+                  bgcolor: '#6DA14E',
                 }}
               >
                 <LockOpenIcon />
               </Avatar>
             </motion.div>
-            
+
             <form onSubmit={handleSubmit(onSubmit)}>
               <TextField
                 fullWidth
@@ -153,7 +152,7 @@ export function LoginPage() {
                 helperText={errors.email?.message}
                 sx={{ mb: 2 }}
               />
-              
+
               <TextField
                 fullWidth
                 label="Password"
@@ -164,7 +163,7 @@ export function LoginPage() {
                 helperText={errors.password?.message}
                 sx={{ mb: 2 }}
               />
-              
+
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Button
                   type="submit"
@@ -183,7 +182,7 @@ export function LoginPage() {
                 </Button>
               </motion.div>
             </form>
-            
+
             <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
               Don't have an account?{' '}
               <Link to="/register" style={{ color: '#6DA14E', textDecoration: 'none' }}>
