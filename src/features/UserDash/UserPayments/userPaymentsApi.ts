@@ -9,7 +9,7 @@ export interface Payment {
 
 export interface PaymentRequest {
   amount: number;
-  method: "mpesa" | "stripe";
+  method: "mpesa"; // Only Mpesa is allowed
 }
 
 export const userPaymentsApi = createApi({

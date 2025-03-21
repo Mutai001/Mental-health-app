@@ -12,10 +12,8 @@ import {
   CircularProgress,
   Chip,
   Button,
-  Box,
 } from "@mui/material";
 import { useGetUserPaymentsQuery, useMakePaymentMutation } from "./userPaymentsApi";
-import { useState } from "react";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -33,14 +31,12 @@ const getStatusColor = (status: string) => {
 const UserPayments = () => {
   const { data: payments = [], isLoading, error } = useGetUserPaymentsQuery();
   const [makePayment, { isLoading: isPaying }] = useMakePaymentMutation();
-  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "stripe">("mpesa");
 
   const handlePayment = async (amount: number) => {
     try {
-      await makePayment({ amount, method: paymentMethod }).unwrap();
+      await makePayment({ amount, method: "mpesa" }).unwrap();
       alert("Payment successful!");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+    } catch {
       alert("Payment failed!");
     }
   };
@@ -111,25 +107,6 @@ const UserPayments = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{ mt: 3 }}>
-          <Typography>Select Payment Method:</Typography>
-          <Button
-            variant={paymentMethod === "mpesa" ? "contained" : "outlined"}
-            color="secondary"
-            onClick={() => setPaymentMethod("mpesa")}
-            sx={{ mx: 1 }}
-          >
-            Mpesa
-          </Button>
-          <Button
-            variant={paymentMethod === "stripe" ? "contained" : "outlined"}
-            color="secondary"
-            onClick={() => setPaymentMethod("stripe")}
-            sx={{ mx: 1 }}
-          >
-            Stripe
-          </Button>
-        </Box>
       </CardContent>
     </Card>
   );
