@@ -49,8 +49,8 @@ const barData = {
 function UserOverview() {
   return (
     <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-      <Box sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
-        <Typography variant="h5" sx={{ color: "#333", mb: 2, textAlign: "center", fontWeight: "bold" }}>
+      <Box sx={{ p: 2, maxWidth: 800, mx: "auto" }}>
+        <Typography variant="h6" sx={{ color: "#333", mb: 2, textAlign: "center", fontWeight: "bold" }}>
           User Dashboard
         </Typography>
         <Grid container spacing={2}>
@@ -58,12 +58,12 @@ function UserOverview() {
             <Grid item xs={12} sm={4} key={title}>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Card sx={{ backgroundColor: color, color: "white", borderRadius: 2, boxShadow: 3 }}>
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 1, fontSize: 30 }}>
+                  <CardContent sx={{ textAlign: "center", p: 2 }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 1, fontSize: 24 }}>
                       {icon}
                     </Box>
                     <Typography variant="body1" fontWeight="bold">{title}</Typography>
-                    <Typography variant="h5" sx={{ fontWeight: "bold" }}>{count}</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>{count}</Typography>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -74,11 +74,19 @@ function UserOverview() {
           <Grid item xs={12} md={6}>
             <motion.div whileHover={{ scale: 1.02 }}>
               <Card sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, boxShadow: 3 }}>
-                <CardContent>
+                <CardContent sx={{ p: 2 }}>
                   <Typography variant="h6" sx={{ mb: 2, textAlign: "center", color: "#333" }}>
                     Bookings Overview
                   </Typography>
-                  <Doughnut data={doughnutData} />
+                  <Box sx={{ height: "300px" }}> {/* Fixed height for the chart container */}
+                    <Doughnut
+                      data={doughnutData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false, // Disable aspect ratio to fit the container
+                      }}
+                    />
+                  </Box>
                 </CardContent>
               </Card>
             </motion.div>
@@ -86,11 +94,19 @@ function UserOverview() {
           <Grid item xs={12} md={6}>
             <motion.div whileHover={{ scale: 1.02 }}>
               <Card sx={{ backgroundColor: "#F5F5F5", borderRadius: 2, boxShadow: 3 }}>
-                <CardContent>
+                <CardContent sx={{ p: 2 }}>
                   <Typography variant="h6" sx={{ mb: 2, textAlign: "center", color: "#333" }}>
                     Monthly Bookings
                   </Typography>
-                  <Bar data={barData} />
+                  <Box sx={{ height: "300px" }}> {/* Fixed height for the chart container */}
+                    <Bar
+                      data={barData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false, // Disable aspect ratio to fit the container
+                      }}
+                    />
+                  </Box>
                 </CardContent>
               </Card>
             </motion.div>
