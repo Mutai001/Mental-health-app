@@ -79,7 +79,7 @@ const App: React.FC = () => {
         <Route path='/ask-ai' element={<AskAI />} />
         <Route path='/contactus' element={<ContactUs />} />
         <Route path='/user' element={<UserDashboard />} />
-        <Route path='/admin' element={<AdminDashboard />} />
+        <Route path='/admin-dashboard' element={<AdminDashboard />} />
         <Route path='/therapist' element={<TherapistDashboard />} />
 
         //TherapistDashboard

@@ -5,7 +5,7 @@ import axiosInstance from '../components/utils/axiosInstance';
 export interface User {
   id?: string;
   email: string;
-  role: 'admin' | 'user' | 'therapist';
+  role: 'admin' | 'patient' | 'therapist';
 }
 
 export interface LoginState {
