@@ -1,155 +1,301 @@
-import React from 'react';
-import { Grid, Card, CardContent, Typography, Button, Chip } from '@mui/material';
+import React, { useState } from 'react';
+import { Grid, Card, Typography, Chip, Box, Avatar, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Define type for character images
+type CharacterImages = {
+  male: string;
+  female: string;
+};
+
+// Animated character images
+const CHARACTERS: CharacterImages = {
+  male: 'https://cdn-icons-png.flaticon.com/512/236/236831.png',
+  female: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
+};
+
+// Define testimonial type
+type Testimonial = {
+  id: number;
+  title: string;
+  text: string;
+  rating: number;
+  tags: string[];
+  gender: keyof CharacterImages; // Ensures only 'male' or 'female'
+  date: string;
+};
 
 // Client testimonials data
-const testimonials = [
+const testimonials: Testimonial[] = [
   {
-    title: 'Best Service Ever!',
-    text: 'One of the Best Place Where You Can Open-up About Your Things. You Can Easily Rely on Them. Thank You Guys for Your Wonderful Service!',
-    video: 'https://player.vimeo.com/video/76979871', // Replace with actual video URL from Pexels
+    id: 1,
+    title: 'Life-Changing Experience',
+    text: 'The support I received helped me navigate through my darkest times. The therapists are compassionate and truly understand mental health struggles.',
     rating: 5,
     tags: ['Depression', 'Life Transitions'],
-    image: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg', // Replace with client image URL
+    gender: 'female',
+    date: '2 weeks ago'
   },
   {
-    title: 'Well-mannered Doctors!',
-    text: 'The Doctors Know How to Treat You in Your Worst. Connecting Them is Valuable. I am Literally Having Good Experience With You Guys!',
-    video: 'https://player.vimeo.com/video/70591645', // Replace with actual video URL from Pexels
+    id: 2,
+    title: 'Exceptional Care',
+    text: 'My therapist provided tools that transformed my approach to anxiety. I now feel equipped to handle challenges I never thought possible.',
     rating: 5,
-    tags: ['Depression', 'Trauma'],
-    image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg', // Replace with client image URL
+    tags: ['Anxiety', 'Trauma'],
+    gender: 'male',
+    date: '1 month ago'
   },
+  {
+    id: 3,
+    title: 'Professional & Kind',
+    text: 'From the first session, I felt heard and understood. The personalized treatment plan made all the difference in my recovery journey.',
+    rating: 4,
+    tags: ['PTSD', 'Counseling'],
+    gender: 'female',
+    date: '3 weeks ago'
+  },
+  {
+    id: 4,
+    title: 'Highly Recommend',
+    text: 'The team created a safe space where I could open up without judgment. My mental health has improved dramatically since starting therapy.',
+    rating: 5,
+    tags: ['Self-Esteem', 'Relationships'],
+    gender: 'male',
+    date: '2 months ago'
+  }
 ];
 
-// Component to display star rating
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
-  <div style={{ display: 'flex', marginBottom: '10px' }}>
-    {[...Array(rating)].map((_, index) => (
-      <StarIcon key={index} style={{ color: '#F4A261' }} />
+  <Box sx={{ display: 'flex', mb: 1 }}>
+    {[...Array(5)].map((_, i) => (
+      <StarIcon key={i} sx={{ color: i < rating ? '#FFD700' : '#E0E0E0', fontSize: '1.2rem' }} />
     ))}
-  </div>
+  </Box>
 );
 
 const ClientTestimonials: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState<'left'|'right'>('right');
+
+  const handleNext = () => {
+    setDirection('right');
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const handlePrev = () => {
+    setDirection('left');
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const visibleTestimonials = [
+    testimonials[(currentIndex - 1 + testimonials.length) % testimonials.length],
+    testimonials[currentIndex],
+    testimonials[(currentIndex + 1) % testimonials.length]
+  ];
+
   return (
-    <section style={{ padding: '50px 0', backgroundColor: '#F5F5F5' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <Typography 
-          variant="h4" 
-          style={{ color: '#2C423F', fontWeight: 'bold' }}
-        >
-          Love We Got From Our Clients
-        </Typography>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <Button 
-            variant="outlined" 
-            style={{
-              color: '#2C423F', 
-              borderColor: '#2C423F', 
-              borderRadius: '50%',
-              minWidth: '40px',
-              minHeight: '40px',
-              padding: '5px',
-            }}
+    <Box sx={{
+      py: 8,
+      px: { xs: 2, sm: 4 },
+      backgroundColor: '#F8F9FA',
+      position: 'relative',
+      overflow: 'hidden',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'radial-gradient(circle at 80% 20%, rgba(106, 179, 68, 0.05) 0%, transparent 30%)'
+      }
+    }}>
+      <Box sx={{ 
+        maxWidth: '1200px', 
+        mx: 'auto',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          mb: 6,
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 3
+        }}>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <ArrowBackIosIcon fontSize="small" />
-          </Button>
-          <Button 
-            variant="outlined" 
-            style={{
-              color: '#2C423F', 
-              borderColor: '#2C423F', 
-              borderRadius: '50%',
-              minWidth: '40px',
-              minHeight: '40px',
-              padding: '5px',
-            }}
-          >
-            <ArrowForwardIosIcon fontSize="small" />
-          </Button>
-        </div>
-      </div>
-      <Grid container spacing={4}>
-        {testimonials.map((testimonial, index) => (
-          <Grid item xs={12} sm={6} key={index}>
-            <Card 
-              style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: '15px',
-                padding: '20px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                gap: '20px',
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                color: '#2C423F', 
+                fontWeight: 700,
+                fontSize: { xs: '2rem', md: '2.5rem' },
+                textShadow: '0px 2px 4px rgba(0,0,0,0.05)'
               }}
             >
-              <div style={{ width: '40%', position: 'relative' }}>
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.title} 
-                  style={{
-                    width: '100%', 
-                    height: '100%', 
-                    borderRadius: '10px', 
-                    objectFit: 'cover',
-                  }} 
-                />
-                <a 
-                  href={testimonial.video} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{
-                    position: 'absolute', 
-                    top: '50%', 
-                    left: '50%', 
-                    transform: 'translate(-50%, -50%)', 
-                    backgroundColor: '#6DA14E', 
-                    borderRadius: '50%',
-                    width: '50px',
-                    height: '50px',
+              Client Success Stories
+            </Typography>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: '#6D757D', 
+                mt: 1,
+                fontSize: { xs: '1rem', md: '1.1rem' }
+              }}
+            >
+              Hear what our clients say about their healing journey
+            </Typography>
+          </motion.div>
+
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <IconButton
+              onClick={handlePrev}
+              sx={{
+                backgroundColor: 'white',
+                color: '#2C423F',
+                border: '1px solid #E0E0E0',
+                '&:hover': {
+                  backgroundColor: '#F0F0F0'
+                }
+              }}
+            >
+              <ArrowBackIos fontSize="small" />
+            </IconButton>
+            <IconButton
+              onClick={handleNext}
+              sx={{
+                backgroundColor: 'white',
+                color: '#2C423F',
+                border: '1px solid #E0E0E0',
+                '&:hover': {
+                  backgroundColor: '#F0F0F0'
+                }
+              }}
+            >
+              <ArrowForwardIos fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
+
+        <Box sx={{ position: 'relative', height: '400px' }}>
+          <AnimatePresence custom={direction}>
+            <Grid container spacing={4} sx={{ position: 'absolute', width: '100%' }}>
+              {visibleTestimonials.map((testimonial, index) => (
+                <Grid 
+                  item 
+                  xs={12} 
+                  md={4} 
+                  key={testimonial.id}
+                  sx={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: '#fff',
-                    textDecoration: 'none',
+                    justifyContent: index === 1 ? 'center' : index === 0 ? 'flex-start' : 'flex-end'
                   }}
                 >
-                  <PlayArrowIcon fontSize="large" />
-                </a>
-              </div>
-              <CardContent style={{ flex: 1 }}>
-                <StarRating rating={testimonial.rating} />
-                <Typography 
-                  variant="h6" 
-                  style={{ fontWeight: 'bold', marginBottom: '10px' }}
-                >
-                  {testimonial.title}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  style={{ color: '#6D757D', marginBottom: '15px' }}
-                >
-                  {testimonial.text}
-                </Typography>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  {testimonial.tags.map((tag, idx) => (
-                    <Chip 
-                      key={idx} 
-                      label={tag} 
-                      variant="outlined" 
-                      style={{ color: '#2C423F', borderColor: '#2C423F' }} 
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </section>
+                  <motion.div
+                    key={testimonial.id}
+                    custom={direction}
+                    initial={{ 
+                      opacity: 0, 
+                      x: index === 1 ? (direction === 'right' ? 100 : -100) : 0,
+                      scale: index === 1 ? 0.9 : 0.8
+                    }}
+                    animate={{ 
+                      opacity: index === 1 ? 1 : 0.6, 
+                      x: 0,
+                      scale: index === 1 ? 1 : 0.9
+                    }}
+                    exit={{ 
+                      opacity: 0,
+                      x: direction === 'right' ? -100 : 100,
+                      scale: 0.8
+                    }}
+                    transition={{ duration: 0.5 }}
+                    style={{
+                      width: '100%',
+                      maxWidth: index === 1 ? '380px' : '340px'
+                    }}
+                  >
+                    <Card 
+                      sx={{
+                        backgroundColor: 'white',
+                        borderRadius: '16px',
+                        p: 3,
+                        height: '100%',
+                        boxShadow: index === 1 ? '0 10px 25px rgba(0,0,0,0.1)' : '0 5px 15px rgba(0,0,0,0.05)',
+                        border: index === 1 ? 'none' : '1px solid #F0F0F0',
+                        opacity: index === 1 ? 1 : 0.8
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                        <Avatar
+                          src={CHARACTERS[testimonial.gender]}
+                          sx={{ 
+                            width: 60, 
+                            height: 60,
+                            mr: 2,
+                            bgcolor: testimonial.gender === 'male' ? '#E3F2FD' : '#FCE4EC'
+                          }}
+                        />
+                        <Box>
+                          <StarRating rating={testimonial.rating} />
+                          <Typography variant="caption" sx={{ color: '#6D757D' }}>
+                            {testimonial.date}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 700, 
+                          mb: 2,
+                          color: '#2C423F'
+                        }}
+                      >
+                        {testimonial.title}
+                      </Typography>
+
+                      <Typography 
+                        variant="body1" 
+                        sx={{ 
+                          color: '#6D757D', 
+                          mb: 3,
+                          fontStyle: 'italic'
+                        }}
+                      >
+                        "{testimonial.text}"
+                      </Typography>
+
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {testimonial.tags.map((tag, idx) => (
+                          <Chip 
+                            key={idx} 
+                            label={tag} 
+                            size="small"
+                            sx={{ 
+                              backgroundColor: '#E8F5E9',
+                              color: '#2C423F',
+                              fontWeight: 500
+                            }} 
+                          />
+                        ))}
+                      </Box>
+                    </Card>
+                  </motion.div>
+                </Grid>
+              ))}
+            </Grid>
+          </AnimatePresence>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
